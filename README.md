@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SignalDesk
 
 An AI-powered notification hub in development, designed to bring important updates from multiple services into one place, starting with Telegram.
@@ -75,3 +76,7 @@ There is no runnable application yet, so installation commands, environment vari
 ## License
 
 MIT is the intended license. A `LICENSE` file containing the MIT license text has not yet been added.
+=======
+# signal-desk
+AI-powered notification hub for aggregating, filtering, and summarizing updates from multiple services.
+>>>>>>> 3be7988919d5a8be11931d9d7469c8468d5d1b64
