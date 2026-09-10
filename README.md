@@ -14,7 +14,7 @@ Important updates are scattered across inboxes, repositories, chat tools, calend
 
 ## Current status
 
-**Planning stage.** This repository currently contains IDE configuration and this README. There is no application code, dependency manifest, runnable service, or implemented integration yet. The concepts, architecture, stack, and roadmap below describe intended work.
+**Scaffolding stage.** The repository contains Python package scaffolds for the backend, AI worker, and Telegram bot, infrastructure placeholders, and design documentation. Entry points, dependency files, Dockerfiles, Compose files, and service configuration are still empty. There is no runnable application or implemented integration yet. The concepts, architecture, stack, and roadmap below describe intended work.
 
 ## Core concepts
 
@@ -61,6 +61,7 @@ No application technologies are implemented or configured yet. The following are
 | Technology | Intended role |
 | --- | --- |
 | Python / FastAPI | API and ingestion endpoints |
+| Next.js | Future dashboard |
 | PostgreSQL | Persistent application and event data |
 | RabbitMQ | Message queue |
 | Redis, where useful | Caching and short-lived state |
@@ -68,13 +69,23 @@ No application technologies are implemented or configured yet. The following are
 | Nginx | Reverse proxy |
 | OpenAI API or another AI provider | Optional event enrichment |
 
+## Project structure
+
+```text
+backend/       API scaffold; application and database packages in app/
+ai-worker/     Worker service scaffold; Python package in ai_worker/
+bot/           Telegram bot scaffold, keyboards, and richer UI components
+rabbitmq/      Broker configuration placeholders
+nginx/         Reverse proxy configuration placeholders
+docs/          Architecture, contracts, development, and operations plans
+```
+
+Start with the [documentation index](docs/README.md) for design notes and the [detailed structure](docs/project-structure.md).
+
 ## Getting started
 
 There is no runnable application yet, so installation commands, environment variables, and startup instructions are not available. These will be documented alongside the first working implementation.
 
 ## License
 
-MIT is the intended license. A `LICENSE` file containing the MIT license text has not yet been added.
-=======
-# signal-desk
-AI-powered notification hub for aggregating, filtering, and summarizing updates from multiple services.
+Licensed under the [MIT License](LICENSE).
