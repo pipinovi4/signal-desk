@@ -1,6 +1,6 @@
 # Telegram bot
 
-Status: scaffold only. The entry point, dependency file, and Dockerfile are empty; Telegram delivery is not implemented yet.
+Status: scaffold only. Dependencies are managed in the root `pyproject.toml`. The entry point and Dockerfile are empty; Telegram delivery is not implemented yet.
 
 ## Responsibilities
 

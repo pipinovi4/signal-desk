@@ -1,6 +1,6 @@
 # SignalDesk documentation
 
-SignalDesk is currently a repository scaffold. Service entry points, dependency files, Dockerfiles, and deployment configuration are placeholders; there is no working application yet. These pages describe intended behavior and the documentation to complete as implementation progresses.
+SignalDesk is currently a repository scaffold. Python packaging is configured in a shared root `pyproject.toml`; the API, bot, ORM, PostgreSQL driver, and validation dependencies are declared. Service entry points, Dockerfiles, and deployment configuration remain placeholders, and there is no working application yet. These pages describe intended behavior and the documentation to complete as implementation progresses.
 
 | Document | Purpose |
 | --- | --- |

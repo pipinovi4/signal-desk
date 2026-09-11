@@ -14,7 +14,7 @@ Important updates are scattered across inboxes, repositories, chat tools, calend
 
 ## Current status
 
-**Scaffolding stage.** The repository contains Python package scaffolds for the backend, AI worker, and Telegram bot, infrastructure placeholders, and design documentation. Entry points, dependency files, Dockerfiles, Compose files, and service configuration are still empty. There is no runnable application or implemented integration yet. The concepts, architecture, stack, and roadmap below describe intended work.
+**Scaffolding stage.** The repository contains Python package scaffolds for the backend, AI worker, and Telegram bot, infrastructure placeholders, and design documentation. Python packages share a root `pyproject.toml` declaring FastAPI, Uvicorn, aiogram, SQLAlchemy, asyncpg, and Pydantic. Entry points, Dockerfiles, Compose files, and service configuration are still empty. There is no runnable application or implemented integration yet. The concepts, architecture, stack, and roadmap below describe intended work.
 
 ## Core concepts
 
@@ -56,13 +56,17 @@ This is a conceptual design; service boundaries and deployment details have not 
 
 ## Tech stack
 
-No application technologies are implemented or configured yet. The following are candidates for the planned implementation, subject to change:
+Python packaging uses a shared `pyproject.toml`, Python 3.12–3.14, and setuptools. FastAPI, Uvicorn, aiogram, SQLAlchemy, asyncpg, and Pydantic are declared dependencies; application behavior and infrastructure are not implemented yet. The table describes their intended roles alongside planned infrastructure:
 
 | Technology | Intended role |
 | --- | --- |
 | Python / FastAPI | API and ingestion endpoints |
 | Next.js | Future dashboard |
-| PostgreSQL | Persistent application and event data |
+| Uvicorn | ASGI server for FastAPI |
+| aiogram | Telegram bot |
+| SQLAlchemy / asyncpg | Async ORM and PostgreSQL driver |
+| Pydantic | Data validation and schemas |
+| PostgreSQL | Planned database server for persistent application and event data |
 | RabbitMQ | Message queue |
 | Redis, where useful | Caching and short-lived state |
 | Docker | Containerized development and deployment |
@@ -84,7 +88,7 @@ Start with the [documentation index](docs/README.md) for design notes and the [d
 
 ## Getting started
 
-There is no runnable application yet, so installation commands, environment variables, and startup instructions are not available. These will be documented alongside the first working implementation.
+See [local development](docs/development.md) to install the shared Python project. There is no runnable application yet; service startup commands and environment variables will be documented with the first working implementation.
 
 ## License
 

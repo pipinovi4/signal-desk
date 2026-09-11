@@ -3,6 +3,7 @@
 Status: current scaffold. Package boundaries are established; application behavior is not implemented.
 
 ```text
+pyproject.toml  Shared Python metadata, dependencies, and package discovery
 backend/
   app/
     db/         Database connections and persistence infrastructure
