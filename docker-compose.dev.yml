@@ -1,0 +1,94 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      target: deps
+    command: npm run dev -- --hostname 0.0.0.0 --port 3000
+    environment:
+      NEXT_TELEMETRY_DISABLED: "1"
+      WATCHPACK_POLLING: "true"
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+      - frontend_next:/app/.next
+    ports: ["3000:3000"]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      target: development
+    environment:
+      DATABASE_URL: postgresql+asyncpg://signaldesk:signaldesk@postgres:5432/signaldesk
+      AMQP_URL: amqp://signaldesk:signaldesk@rabbitmq:5672/
+    volumes: ["./backend:/app/backend"]
+    ports: ["8000:8000"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      rabbitmq: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  ai-worker:
+    build:
+      context: .
+      dockerfile: ai-worker/Dockerfile
+      target: development
+    environment:
+      DATABASE_URL: postgresql+asyncpg://signaldesk:signaldesk@postgres:5432/signaldesk
+      AMQP_URL: amqp://signaldesk:signaldesk@rabbitmq:5672/
+    volumes: ["./ai-worker:/app/ai-worker"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      rabbitmq: {condition: service_healthy}
+  bot:
+    build:
+      context: .
+      dockerfile: bot/Dockerfile
+      target: development
+    environment:
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      AMQP_URL: amqp://signaldesk:signaldesk@rabbitmq:5672/
+    volumes: ["./bot:/app/bot"]
+    depends_on:
+      rabbitmq: {condition: service_healthy}
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: signaldesk
+      POSTGRES_USER: signaldesk
+      POSTGRES_PASSWORD: signaldesk
+    volumes: ["postgres_dev_data:/var/lib/postgresql/data"]
+    ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U signaldesk -d signaldesk"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  rabbitmq:
+    build: {context: ./rabbitmq}
+    environment:
+      RABBITMQ_DEFAULT_USER: signaldesk
+      RABBITMQ_DEFAULT_PASS: signaldesk
+    volumes: ["rabbitmq_dev_data:/var/lib/rabbitmq"]
+    ports: ["5672:5672", "15672:15672"]
+  nginx:
+    image: nginx:1.29-alpine
+    ports: ["8080:80"]
+    volumes: ["./nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro"]
+    depends_on:
+      frontend: {condition: service_healthy}
+      backend: {condition: service_healthy}
+volumes:
+  frontend_node_modules:
+  frontend_next:
+  postgres_dev_data:
+  rabbitmq_dev_data:

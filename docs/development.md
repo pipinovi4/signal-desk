@@ -1,6 +1,6 @@
 # Local development
 
-Status: Python packaging is configured in the root `pyproject.toml`. The application entry points and deployment files are still placeholders; there is no runnable notification pipeline yet.
+Status: Python packaging is configured in the root `pyproject.toml`. Minimal service entry points and Docker Compose environments are configured; there is no implemented notification pipeline yet.
 
 ## Shared Python project
 
@@ -19,7 +19,7 @@ The installation exposes `backend`, `bot`, and `ai_worker`. Use package-qualifie
 
 ## Dependency management
 
-Manage runtime dependencies in `[project].dependencies` in the root `pyproject.toml`. The shared set includes FastAPI and Uvicorn for the backend, aiogram for the bot, SQLAlchemy with asyncio support and asyncpg for PostgreSQL access, and Pydantic for validation. PostgreSQL itself is a separate server, not a Python dependency. Database connections and application startup are not implemented yet. Do not recreate per-service `requirements.txt` files. Introduce optional dependency groups if services later need separate installation sets.
+Manage runtime dependencies in `[project].dependencies` in the root `pyproject.toml`. The shared set includes FastAPI and Uvicorn for the backend, aiogram for the bot, SQLAlchemy with asyncio support and asyncpg for PostgreSQL access, and Pydantic for validation. PostgreSQL itself is a separate server, not a Python dependency. Database and broker connections are not implemented yet; minimal application startup is available. Do not recreate per-service `requirements.txt` files. Introduce optional dependency groups if services later need separate installation sets.
 
 Development tools are pinned in the `dev` extra: Ruff, mypy, pytest, pytest-asyncio, and pre-commit. A full dependency-locking workflow has not been selected. The manifest alone does not provide a fully locked environment. JavaScript dependencies for the future Next.js frontend will remain in its own `package.json`.
 
@@ -49,7 +49,7 @@ GitHub Actions runs the same four read-only check commands on pull requests and 
 - [ ] Choose a reproducible dependency-locking workflow and add further dependencies as needed.
 - [x] Configure lint, formatting, strict typing, test discovery, and commit hooks.
 - [ ] Add sanitized `.env.example` files and document purpose, required status, default, and owning service for each variable.
-- [ ] Define local PostgreSQL and RabbitMQ configuration in Compose.
+- [x] Define local PostgreSQL and RabbitMQ configuration in Compose.
 - [ ] Document service startup, health checks, and shutdown commands.
 - [ ] Initialize Alembic and document migration creation and application.
 - [ ] Document Telegram delivery with AI disabled.

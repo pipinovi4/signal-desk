@@ -30,6 +30,7 @@ dev = [
   "pytest==9.1.1",
   "pytest-asyncio==1.4.0",
   "pre-commit==4.6.2",
+  "watchfiles==1.1.1",
 ]
 
 [tool.setuptools]

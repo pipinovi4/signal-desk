@@ -1,6 +1,6 @@
 # Telegram bot
 
-Status: scaffold only. Dependencies are managed in the root `pyproject.toml`. The entry point and Dockerfile are empty; Telegram delivery is not implemented yet.
+Status: runnable polling scaffold. `bot.main` validates `TELEGRAM_BOT_TOKEN` and starts aiogram long polling, but handlers and notification delivery are not implemented yet. Dependencies are managed in the root `pyproject.toml`.
 
 ## Responsibilities
 
@@ -16,4 +16,4 @@ The bot is intended to deliver notifications and handle Telegram interactions.
 
 Keep `ui/` and `keyboards/` separate. A handler may combine a generated table or chart with navigation buttons; the renderer should not own Telegram delivery.
 
-See the [architecture](../docs/architecture.md) and [development checklist](../docs/development.md). Startup instructions will be added with a working implementation.
+See the [architecture](../docs/architecture.md) and [development checklist](../docs/development.md). Container startup and environment variables are documented in the [deployment guide](../docs/deployment.md).

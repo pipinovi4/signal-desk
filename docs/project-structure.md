@@ -38,8 +38,8 @@ bot/
   ui/           Tables, charts, and other complex presentation components
   tests/        Python test package
   main.py       Empty entry point
-rabbitmq/       Broker configuration placeholders and test directory
-nginx/          Proxy configuration placeholders
+rabbitmq/       RabbitMQ image, definitions, and test directory
+nginx/          Development and production proxy configuration
 docs/           Design and development documentation
 ```
 

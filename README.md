@@ -14,7 +14,7 @@ Important updates are scattered across inboxes, repositories, chat tools, calend
 
 ## Current status
 
-**Scaffolding stage.** The repository contains Python package scaffolds for the backend, AI worker, and Telegram bot, infrastructure placeholders, and design documentation. Python packages share a root `pyproject.toml` declaring FastAPI, Uvicorn, aiogram, SQLAlchemy, asyncpg, and Pydantic. Entry points, Dockerfiles, Compose files, and service configuration are still empty. There is no runnable application or implemented integration yet. The concepts, architecture, stack, and roadmap below describe intended work.
+**Scaffolding stage.** The repository contains Python package scaffolds for the backend, AI worker, and Telegram bot, infrastructure placeholders, and design documentation. Python packages share a root `pyproject.toml` declaring FastAPI, Uvicorn, aiogram, SQLAlchemy, asyncpg, and Pydantic. Minimal process entry points, Dockerfiles, and separate development and production-oriented Compose environments are configured. Integrations and the notification pipeline are not implemented yet. The concepts, architecture, stack, and roadmap below describe intended work.
 
 ## Core concepts
 
@@ -79,8 +79,8 @@ Python packaging uses a shared `pyproject.toml`, Python 3.12–3.14, and setupto
 backend/       API scaffold; application and database packages in app/
 ai-worker/     Worker service scaffold; Python package in ai_worker/
 bot/           Telegram bot scaffold, keyboards, and richer UI components
-rabbitmq/      Broker configuration placeholders
-nginx/         Reverse proxy configuration placeholders
+rabbitmq/      RabbitMQ image and definitions
+nginx/         Development and production reverse proxy configuration
 docs/          Architecture, contracts, development, and operations plans
 ```
 
@@ -88,7 +88,7 @@ Start with the [documentation index](docs/README.md) for design notes and the [d
 
 ## Getting started
 
-See [local development](docs/development.md) to install the shared Python project. There is no runnable application yet; service startup commands and environment variables will be documented with the first working implementation.
+See [local development](docs/development.md) for the Python environment and [deployment](docs/deployment.md) for Docker Compose startup, ports, and environment variables. The current containers provide runnable scaffolds; the notification pipeline is not implemented yet.
 
 ## Development checks
 
