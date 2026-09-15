@@ -2,8 +2,21 @@ name: Python quality
 
 on:
   pull_request:
+    paths:
+      - "backend/**"
+      - "ai-worker/**"
+      - "bot/**"
+      - "pyproject.toml"
+      - ".github/workflows/python-quality.yml"
+
   push:
     branches: [main, master, develop]
+    paths:
+      - "backend/**"
+      - "ai-worker/**"
+      - "bot/**"
+      - "pyproject.toml"
+      - ".github/workflows/python-quality.yml"
 
 permissions:
   contents: read
@@ -11,20 +24,27 @@ permissions:
 jobs:
   quality:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v7.0.1
+
       - uses: actions/setup-python@v7.0.0
         with:
           python-version: "3.12"
           cache: pip
           cache-dependency-path: pyproject.toml
+
       - name: Install project and development tools
         run: python -m pip install -e '.[dev]'
+
       - name: Lint
         run: ruff check .
+
       - name: Check formatting
         run: ruff format --check .
+
       - name: Check types
         run: mypy .
+
       - name: Run tests
         run: pytest
