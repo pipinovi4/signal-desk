@@ -1,0 +1,10 @@
+node_modules
+.next
+coverage
+playwright-report
+test-results
+.git
+.gitignore
+README.md
+npm-debug.log*
+.env*
