@@ -90,6 +90,10 @@ Start with the [documentation index](docs/README.md) for design notes and the [d
 
 See [local development](docs/development.md) to install the shared Python project. There is no runnable application yet; service startup commands and environment variables will be documented with the first working implementation.
 
+## Development checks
+
+Install the development extra and run `make check` as described in [local development](docs/development.md). Ruff, strict mypy, pytest, and pre-commit are configured. No tests exist yet, so pytest and the quality workflow currently report failure until real tests are added.
+
 ## License
 
 Licensed under the [MIT License](LICENSE).

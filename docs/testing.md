@@ -1,6 +1,14 @@
 # Testing
 
-Status: no tests or test runner are configured. Test directories are placeholders; package initializers do not constitute tests.
+Status: pytest and pytest-asyncio are configured in the root `pyproject.toml`. There are no actual tests yet; package initializers do not constitute tests. Running `pytest` currently exits with code 5 (no tests collected). This also keeps `make check` and CI failing until meaningful tests exist.
+
+## Running tests
+
+Install the `dev` extra and activate the project environment as described in [local development](development.md), then run `pytest` or `make test` from the repository root.
+
+Discovery covers `backend/tests`, `bot/tests`, `ai-worker/tests`, and `rabbitmq/tests`. Add real tests using pytest naming conventions (`test_*.py` and `test_*` functions) alongside implemented behavior. Async tests use automatic asyncio mode and function-scoped event loops.
+
+Unknown markers and configuration options fail validation. Warnings are treated as errors; there are currently no warning exceptions. If a future third-party warning cannot be resolved, document and scope any exception to its precise message and category.
 
 ## Planned coverage
 
@@ -19,4 +27,4 @@ Status: no tests or test runner are configured. Test directories are placeholder
 - A failed delivery is retried according to a bounded policy.
 - Events from different accounts cannot be mixed or delivered to the wrong recipient.
 
-Use synthetic fixtures, isolated databases and queues, and mocked external APIs by default. Keep live-provider tests opt-in with dedicated test accounts. Document verified test commands and cleanup procedures once tooling exists.
+Use synthetic fixtures, isolated databases and queues, and mocked external APIs by default. Keep live-provider tests opt-in with dedicated test accounts. Document service-specific fixtures and cleanup procedures when integration tests are added.
