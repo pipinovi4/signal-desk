@@ -32,3 +32,22 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
+  - repo: local
+    hooks:
+      - id: frontend-eslint
+        name: frontend eslint
+        entry: bash -c 'cd frontend && npm run lint'
+        language: system
+        pass_filenames: false
+
+      - id: frontend-typecheck
+        name: frontend typecheck
+        entry: bash -c 'cd frontend && npm run typecheck'
+        language: system
+        pass_filenames: false
+
+      - id: frontend-tests
+        name: frontend tests
+        entry: bash -c 'cd frontend && npm run test:run'
+        language: system
+        pass_filenames: false
