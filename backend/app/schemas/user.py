@@ -21,6 +21,12 @@ class UserBase(BaseSchema):
         pattern=USERNAME_PATTERN,
     )
 
+    display_name: str | None = Field(
+        default=None,
+        min_length=USERNAME_MIN_LENGTH,
+        max_length=USERNAME_MAX_LENGTH,
+    )
+
     avatar_url: str | None = None
 
     @field_validator("username", mode="before")

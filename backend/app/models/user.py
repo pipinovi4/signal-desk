@@ -1,18 +1,32 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, DateTime, String, true
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db import Base
 from app.db.mixins import TimestampMixin, UUIDMixin
+
+if TYPE_CHECKING:
+    from app.models.membership import Membership
 
 
 class User(Base, UUIDMixin, TimestampMixin):
     __tablename__ = "users"
 
+    memberships: Mapped[list["Membership"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+
     email: Mapped[str] = mapped_column(
         String(320),
         unique=True,
+        nullable=False,
+    )
+
+    display_name: Mapped[str] = mapped_column(
+        String(320),
         nullable=False,
     )
 
