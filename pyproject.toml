@@ -79,10 +79,15 @@ warn_unreachable = true
 show_error_codes = true
 pretty = true
 plugins = ["pydantic.mypy"]
-mypy_path = ["$MYPY_CONFIG_FILE_DIR", "$MYPY_CONFIG_FILE_DIR/ai-worker"]
+mypy_path = [
+  "$MYPY_CONFIG_FILE_DIR/backend",
+  "$MYPY_CONFIG_FILE_DIR/ai-worker",
+]
 explicit_package_bases = true
-exclude = '(^|/)(\.git|\.venv|venv|__pycache__|\.mypy_cache|\.pytest_cache|\.ruff_cache|build|dist|node_modules|[^/]+\.egg-info)(/|$)'
-
+exclude = [
+  '(^|/)(\.git|\.venv|venv|__pycache__|\.mypy_cache|\.pytest_cache|\.ruff_cache|build|dist|node_modules|[^/]+\.egg-info)(/|$)',
+  '(^|/)(backend/tests|bot/tests|ai-worker/tests|rabbitmq/tests)(/|$)',
+]
 [tool.pydantic-mypy]
 init_typed = true
 init_forbid_extra = true

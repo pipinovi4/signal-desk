@@ -2,17 +2,17 @@
 
 import logging
 
+from app.core import lifespan
+from app.core.settings import settings
+from app.routes import create_api_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from backend.app.core.settings import settings
-from backend.app.routes import create_api_router
 
 logger = logging.getLogger("signalDesk.backend.main")
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="SignalDesk API", version="0.1.0", root_path="/api")
+    app = FastAPI(title="SignalDesk API", version="0.1.0", root_path="/api", lifespan=lifespan)
 
     app.add_middleware(
         CORSMiddleware,
