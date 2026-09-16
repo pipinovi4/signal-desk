@@ -1,0 +1,296 @@
+.page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+
+  padding: 32px 20px;
+
+  background: var(--color-background);
+  overflow: hidden;
+}
+
+.content {
+  width: 100%;
+  max-width: 620px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  animation: content-enter 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Brand */
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+  margin-bottom: 42px;
+}
+
+.brandSpark {
+  position: relative;
+
+  width: 18px;
+  height: 18px;
+
+  flex: 0 0 18px;
+}
+
+.brandSpark::before {
+  content: "";
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  width: 6px;
+  height: 6px;
+
+  background: var(--color-accent);
+  border-radius: 50%;
+
+  transform: translate(-50%, -50%);
+
+  animation: dot-state 600ms ease-out 600ms both;
+}
+
+.brandSpark::after {
+  content: "";
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  width: 8px;
+  height: 8px;
+
+  background: var(--color-accent);
+
+  clip-path: polygon(
+    50% 0%,
+    57% 43%,
+    100% 50%,
+    57% 57%,
+    50% 100%,
+    43% 57%,
+    0% 50%,
+    43% 43%
+  );
+
+  opacity: 0;
+
+  transform: translate(-50%, -50%) scale(0.3);
+
+  animation: star-state 600ms cubic-bezier(0.22, 1, 0.36, 1) 600ms both;
+}
+
+/* 404 */
+
+.error {
+  position: relative;
+
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.code {
+  position: relative;
+  z-index: 2;
+
+  font-size: clamp(7rem, 20vw, 11rem);
+  line-height: 0.9;
+
+  font-weight: 700;
+  letter-spacing: -0.08em;
+
+  color: var(--color-surface-secondary);
+
+  user-select: none;
+}
+
+.signalLine {
+  position: absolute;
+  z-index: 1;
+
+  left: 6%;
+  right: 6%;
+  top: 50%;
+
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-border) 15%,
+    var(--color-border) 85%,
+    transparent
+  );
+}
+
+.signalNode {
+  position: absolute;
+
+  top: 50%;
+  left: 18%;
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+  background: var(--color-accent);
+
+  transform: translate(-50%, -50%);
+
+  animation: signal-pass 2200ms cubic-bezier(0.4, 0, 0.2, 1) 1200ms both;
+}
+
+@keyframes signal-pass {
+  0% {
+    left: 18%;
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  88% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 82%;
+    opacity: 0;
+  }
+}
+
+/* Copy */
+
+.copy {
+  margin-top: 32px;
+}
+
+/* Status */
+
+.status {
+  margin-top: 32px;
+
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  letter-spacing: 0.14em;
+
+  color: var(--color-muted-foreground);
+  opacity: 0.55;
+}
+
+.separator {
+  opacity: 0.45;
+}
+
+/* Spark */
+
+@keyframes dot-state {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  20% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  40% {
+    opacity: 0.25;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+
+  50% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.65);
+  }
+
+  60% {
+    opacity: 0.25;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+
+  80% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes star-state {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+
+  35% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content,
+  .brandSpark::before,
+  .brandSpark::after,
+  .signalNode {
+    animation: none;
+  }
+
+  .brandSpark::after {
+    display: none;
+  }
+
+  .signalNode {
+    left: 50%;
+    opacity: 1;
+  }
+}
