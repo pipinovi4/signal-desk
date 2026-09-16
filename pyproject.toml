@@ -14,17 +14,16 @@ dependencies = [
   # Backend API and ASGI server
   "fastapi>=0.141.1,<0.142",
   "uvicorn>=0.52.4,<0.53",
-
   # Telegram bot
   "aiogram>=3.31.0,<4",
-
   # Async ORM and PostgreSQL driver
   "sqlalchemy[asyncio]>=2.0.52,<2.1",
   "asyncpg>=0.31.0,<0.32",
-
   # Shared validation and settings management; keep compatible with aiogram
   "pydantic>=2.13.5,<2.14",
   "pydantic-settings>=2.10,<3",
+  "alembic>=1.16,<2",
+  "uuid6>=2025.0.1,<2026",
 ]
 
 [project.optional-dependencies]
