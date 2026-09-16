@@ -9,7 +9,7 @@ export function SocialAuthButtons() {
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <button
-          className="border-border bg-surface-secondary text-foreground focus-visible:outline-primary flex h-11 w-full items-center justify-center gap-2.5 rounded-lg border px-4 text-sm font-medium transition-colors hover:bg-[#232329]"
+          className="border-border bg-surface-secondary text-foreground focus-visible:outline-primary hover:bg-surface-hover flex h-11 w-full items-center justify-center gap-2.5 rounded-lg border px-4 text-sm font-medium transition-colors"
           type="button"
           aria-label="Continue with Google"
         >
@@ -17,7 +17,7 @@ export function SocialAuthButtons() {
           <span>Google</span>
         </button>
         <button
-          className="border-border bg-surface-secondary text-foreground focus-visible:outline-primary flex h-11 w-full items-center justify-center gap-2.5 rounded-lg border px-4 text-sm font-medium transition-colors hover:bg-[#232329]"
+          className="border-border bg-surface-secondary text-foreground focus-visible:outline-primary hover:bg-surface-hover flex h-11 w-full items-center justify-center gap-2.5 rounded-lg border px-4 text-sm font-medium transition-colors"
           type="button"
           aria-label="Continue with GitHub"
         >

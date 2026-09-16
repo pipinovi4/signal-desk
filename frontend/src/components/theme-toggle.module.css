@@ -1,0 +1,14 @@
+.sun,
+.moon {
+  display: none;
+  width: 18px;
+  height: 18px;
+}
+
+:global(html[data-theme="dark"]) .sun {
+  display: block;
+}
+
+:global(html[data-theme="light"]) .moon {
+  display: block;
+}

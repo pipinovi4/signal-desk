@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 import styles from "./not-found.module.css";
 
 export default function NotFound() {
   return (
     <main className={styles.page}>
+      <ThemeToggle className="fixed top-4 right-4 z-10 sm:top-6 sm:right-6" />
       <section className={styles.content}>
         <div className={styles.brand}>
           <span className={styles.brandSpark} aria-hidden="true" />
@@ -33,7 +35,7 @@ export default function NotFound() {
 
         <Link
           href="/"
-          className="bg-primary hover:bg-primary-hover mt-8 inline-flex h-11 items-center justify-center rounded-xl px-6 text-sm font-semibold text-white transition-colors"
+          className="bg-primary hover:bg-primary-hover text-primary-foreground mt-8 inline-flex h-11 items-center justify-center rounded-xl px-6 text-sm font-semibold transition-colors"
         >
           Return home
         </Link>

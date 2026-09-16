@@ -37,7 +37,10 @@
 
 .brandSpark::after {
   position: absolute;
-  inset: 0;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
   content: "";
   background: var(--color-accent);
   clip-path: polygon(
@@ -51,7 +54,7 @@
     43% 43%
   );
   opacity: 0;
-  transform: scale(0.15);
+  transform: translate(-50%, -50%) scale(0.15);
   animation: star-state 550ms cubic-bezier(0.22, 1, 0.36, 1) 550ms both;
 }
 
@@ -117,27 +120,28 @@
   0% {
     opacity: 0;
     filter: brightness(1);
-    transform: scale(0.15);
+    transform: translate(-50%, -50%) scale(0.15);
   }
 
   30% {
     opacity: 1;
-    transform: scale(0.55);
+    transform: translate(-50%, -50%) scale(0.55);
   }
 
-  55% {
+  52%,
+  62% {
     opacity: 1;
-    transform: scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
 
-  75% {
+  78% {
     opacity: 1;
-    transform: scale(0.55);
+    transform: translate(-50%, -50%) scale(0.55);
   }
 
   100% {
     opacity: 0;
-    transform: scale(0.15);
+    transform: translate(-50%, -50%) scale(0.15);
   }
 }
 

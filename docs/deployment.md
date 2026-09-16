@@ -4,17 +4,23 @@ Docker Compose now defines separate development and production-oriented environm
 
 ## Environment
 
-Copy `.env.example` to `.env` and replace every placeholder before production startup:
+Configuration is owned by each service rather than a shared root .env.
+Provision these files from their committed examples:
 
-- POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD configure PostgreSQL.
-- DATABASE_URL is the SQLAlchemy/asyncpg URL used by backend and worker.
-- RABBITMQ_USER, RABBITMQ_PASSWORD configure RabbitMQ.
-- AMQP_URL is the broker URL used by backend, worker, and bot.
+```bash
+cp backend/.env.example backend/.env
+cp bot/.env.example bot/.env
+cp postgres/.env.example postgres/.env
+cp rabbitmq/.env.example rabbitmq/.env
+```
 
-URL-encode credentials embedded in DATABASE_URL and AMQP_URL when they contain reserved URL characters.
-- `TELEGRAM_BOT_TOKEN` is required for Telegram long polling.
+Both Compose configurations load those service files directly. Development
+values may use Docker service names such as postgres; production values and
+secrets must be replaced or injected securely by the deployment
+infrastructure. Never commit the real files.
 
-Development uses local PostgreSQL and RabbitMQ credentials declared in `docker-compose.dev.yml`. Set `TELEGRAM_BOT_TOKEN` in the shell or an untracked `.env` file to keep the bot running; without it, the bot exits with a clear error while the other services remain usable.
+See [environment configuration](environment.md) for the variable reference,
+secret classification, CORS format, and host-versus-container networking.
 
 ## Development
 
@@ -36,7 +42,7 @@ Frontend source is bind-mounted while `node_modules` and `.next` stay in named v
 
 ## Production-oriented Compose
 
-Create `.env`, then run:
+After provisioning the service-owned environment files above, run:
 
 ```bash
 docker compose up -d --build

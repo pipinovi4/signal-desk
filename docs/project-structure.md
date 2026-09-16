@@ -5,6 +5,7 @@ Status: current scaffold. Package boundaries are established; application behavi
 ```text
 pyproject.toml  Shared Python metadata, dependencies, and package discovery
 backend/
+  .env.example  Sanitized backend configuration template
   app/
     db/         Database connections and persistence infrastructure
     core/       Core configuration and application concerns
@@ -29,6 +30,7 @@ ai-worker/
   tests/        Python test package
   main.py       Empty entry point
 bot/
+  .env.example  Sanitized Telegram configuration template
   config/       Configuration package
   constants/    Constants package
   core/         Core package
@@ -38,12 +40,23 @@ bot/
   ui/           Tables, charts, and other complex presentation components
   tests/        Python test package
   main.py       Empty entry point
-rabbitmq/       RabbitMQ image, definitions, and test directory
+postgres/       PostgreSQL environment template
+rabbitmq/       RabbitMQ image, definitions, environment template, and test directory
+redis/          Redis configuration scaffold; no runtime environment variables yet
 nginx/          Development and production proxy configuration
 docs/           Design and development documentation
 ```
 
 Descriptions indicate intended responsibilities, not implemented features. Git does not store empty directories, so `backend/alembic/` and `backend/scripts/` may be absent after cloning until their first files are added.
+
+## Environment ownership
+
+Runtime configuration stays with its owning service in backend/.env, bot/.env,
+postgres/.env, and rabbitmq/.env. Only sanitized .env.example files are
+committed. The frontend, AI worker, Redis, and nginx currently require no
+service-owned environment files. See
+[environment configuration](environment.md) for setup and the variable
+reference.
 
 ## Package boundaries
 

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 type AuthLayoutProps = Readonly<{
   children: ReactNode;
@@ -6,7 +7,8 @@ type AuthLayoutProps = Readonly<{
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <main className="bg-background text-foreground flex min-h-dvh w-full items-center justify-center px-3 py-6 sm:px-6 sm:py-10">
+    <main className="bg-background text-foreground relative flex min-h-dvh w-full items-center justify-center max-sm:px-6 max-sm:py-20">
+      <ThemeToggle className="absolute top-4 right-4 max-sm:top-6 max-sm:right-6" />
       <div className="mx-auto w-full max-w-[488px]">{children}</div>
     </main>
   );

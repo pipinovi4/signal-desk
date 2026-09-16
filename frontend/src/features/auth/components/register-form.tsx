@@ -52,7 +52,7 @@ export function RegisterForm() {
       />
 
       <button
-        className="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:outline-primary mt-2 h-12 w-full rounded-lg px-4 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60"
+        className="bg-primary text-primary-foreground hover:bg-primary-hover hover:shadow-[0_0_0_1px_var(--color-primary-glow),0_0_22px_var(--color-primary-glow)] focus-visible:outline-primary mt-2 h-12 w-full rounded-lg px-4 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60"
         type="submit"
       >
         Create account

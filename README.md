@@ -58,20 +58,20 @@ This is a conceptual design; service boundaries and deployment details have not 
 
 Python packaging uses a shared `pyproject.toml`, Python 3.12–3.14, and setuptools. FastAPI, Uvicorn, aiogram, SQLAlchemy, asyncpg, and Pydantic are declared dependencies; application behavior and infrastructure are not implemented yet. The table describes their intended roles alongside planned infrastructure:
 
-| Technology | Intended role |
-| --- | --- |
-| Python / FastAPI | API and ingestion endpoints |
-| Next.js | Future dashboard |
-| Uvicorn | ASGI server for FastAPI |
-| aiogram | Telegram bot |
-| SQLAlchemy / asyncpg | Async ORM and PostgreSQL driver |
-| Pydantic | Data validation and schemas |
-| PostgreSQL | Planned database server for persistent application and event data |
-| RabbitMQ | Message queue |
-| Redis, where useful | Caching and short-lived state |
-| Docker | Containerized development and deployment |
-| Nginx | Reverse proxy |
-| OpenAI API or another AI provider | Optional event enrichment |
+| Technology                        | Intended role                                                     |
+| --------------------------------- | ----------------------------------------------------------------- |
+| Python / FastAPI                  | API and ingestion endpoints                                       |
+| Next.js                           | Future dashboard                                                  |
+| Uvicorn                           | ASGI server for FastAPI                                           |
+| aiogram                           | Telegram bot                                                      |
+| SQLAlchemy / asyncpg              | Async ORM and PostgreSQL driver                                   |
+| Pydantic                          | Data validation and schemas                                       |
+| PostgreSQL                        | Planned database server for persistent application and event data |
+| RabbitMQ                          | Message queue                                                     |
+| Redis, where useful               | Caching and short-lived state                                     |
+| Docker                            | Containerized development and deployment                          |
+| Nginx                             | Reverse proxy                                                     |
+| OpenAI API or another AI provider | Optional event enrichment                                         |
 
 ## Project structure
 
@@ -88,7 +88,7 @@ Start with the [documentation index](docs/README.md) for design notes and the [d
 
 ## Getting started
 
-See [local development](docs/development.md) for the Python environment and [deployment](docs/deployment.md) for Docker Compose startup, ports, and environment variables. The current containers provide runnable scaffolds; the notification pipeline is not implemented yet.
+See [local development](docs/development.md) for setup, [environment configuration](docs/environment.md) for service-owned variables and networking, and [deployment](docs/deployment.md) for Docker Compose startup and operations. The current containers provide runnable scaffolds; the notification pipeline is not implemented yet.
 
 ## Development checks
 
