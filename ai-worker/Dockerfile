@@ -21,7 +21,7 @@ RUN python -m pip install --no-cache-dir -e ".[dev]"
 
 USER signaldesk
 
-CMD ["watchfiles", "python ai-worker/main.py", "ai-worker"]
+CMD ["watchfiles", "python -m ai_worker.main", "ai-worker"]
 
 
 FROM base AS production
@@ -30,4 +30,4 @@ RUN python -m pip install --no-cache-dir .
 
 USER signaldesk
 
-CMD ["python", "ai-worker/main.py"]
+CMD ["python", "-m", "ai_worker.main"]

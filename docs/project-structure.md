@@ -19,7 +19,7 @@ backend/
   alembic/      Empty migration directory; Alembic is not initialized
   scripts/      Empty utility-script directory
   tests/        Python test package
-  main.py       Empty entry point
+  main.py       Backend application entry point
 ai-worker/
   ai_worker/
     consumers/  Queue consumers
@@ -27,8 +27,8 @@ ai-worker/
     providers/  AI provider adapters
     schemas/    Worker message schemas
     services/   Processing and enrichment services
+    main.py     Worker lifecycle entry point
   tests/        Python test package
-  main.py       Empty entry point
 bot/
   .env.example  Sanitized Telegram configuration template
   config/       Configuration package
@@ -39,7 +39,7 @@ bot/
   rabbitmq/     RabbitMQ client package
   ui/           Tables, charts, and other complex presentation components
   tests/        Python test package
-  main.py       Empty entry point
+  main.py       Telegram polling entry point
 postgres/       PostgreSQL environment template
 rabbitmq/       RabbitMQ image, definitions, environment template, and test directory
 redis/          Redis configuration scaffold; no runtime environment variables yet

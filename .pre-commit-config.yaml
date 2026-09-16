@@ -28,12 +28,7 @@ repos:
     hooks:
       - id: mypy
         name: mypy (project environment)
-        entry: >-
-          bash -c '
-            (cd backend && mypy --config-file ../pyproject.toml app main.py) &&
-            (mypy --config-file pyproject.toml -p bot) &&
-            (cd ai-worker && mypy --config-file ../pyproject.toml ai_worker main.py)
-          '
+        entry: mypy --config-file pyproject.toml .
         language: system
         pass_filenames: false
         types: [ python ]
