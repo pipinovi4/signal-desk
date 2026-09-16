@@ -2,7 +2,7 @@
 
 import logging
 
-from app.core import lifespan
+from app.core.lifespan import lifespan
 from app.core.settings import settings
 from app.routes import create_api_router
 from fastapi import FastAPI
