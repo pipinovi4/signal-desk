@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, DateTime, String, true
+from sqlalchemy.dialects.postgresql import INET
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db import Base
@@ -9,6 +10,7 @@ from app.db.mixins import TimestampMixin, UUIDMixin
 
 if TYPE_CHECKING:
     from app.models.auth_identity import AuthIdentity
+    from app.models.auth_session import AuthSession
     from app.models.membership import Membership
     from app.models.password_credential import PasswordCredential
 
@@ -28,6 +30,11 @@ class User(Base, UUIDMixin, TimestampMixin):
     )
 
     auth_identities: Mapped[list["AuthIdentity"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+
+    auth_sessions: Mapped[list["AuthSession"]] = relationship(
         back_populates="user",
         cascade="all, delete-orphan",
     )
@@ -64,4 +71,9 @@ class User(Base, UUIDMixin, TimestampMixin):
         default=True,
         server_default=true(),
         nullable=False,
+    )
+
+    agent_ip: Mapped[str | None] = mapped_column(
+        INET,
+        nullable=True,
     )
