@@ -34,6 +34,7 @@ dev = [
   "pytest-asyncio==1.4.0",
   "pre-commit==4.6.2",
   "watchfiles==1.1.1",
+  "pwdlib[argon2]>=0.3,<1",
 ]
 
 [tool.setuptools]
