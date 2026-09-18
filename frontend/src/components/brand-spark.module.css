@@ -1,0 +1,195 @@
+.brandSpark {
+  --spark-size: 30px;
+  --dot-size: 6px;
+  --star-size: 18px;
+
+  --spark-duration: 550ms;
+  --spark-delay: 550ms;
+
+  position: relative;
+  display: inline-block;
+  width: var(--spark-size);
+  height: var(--spark-size);
+  flex: 0 0 var(--spark-size);
+}
+
+.brandSpark::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  content: "";
+  background: var(--color-accent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.brandSpark::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--star-size);
+  height: var(--star-size);
+  content: "";
+  background: var(--color-accent);
+  clip-path: polygon(
+    50% 0%,
+    57% 43%,
+    100% 50%,
+    57% 57%,
+    50% 100%,
+    43% 57%,
+    0% 50%,
+    43% 43%
+  );
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.15);
+}
+
+.animated::before {
+  animation:
+    dot-state
+    var(--spark-duration)
+    ease-out
+    var(--spark-delay)
+    both;
+}
+
+.animated::after {
+  animation:
+    star-state
+    var(--spark-duration)
+    cubic-bezier(0.22, 1, 0.36, 1)
+    var(--spark-delay)
+    both;
+}
+
+.xs {
+  --spark-size: 12px;
+  --dot-size: 3px;
+  --star-size: 8px;
+}
+
+.sm {
+  --spark-size: 20px;
+  --dot-size: 4px;
+  --star-size: 12px;
+}
+
+.md {
+  --spark-size: 30px;
+  --dot-size: 6px;
+  --star-size: 18px;
+}
+
+.lg {
+  --spark-size: 40px;
+  --dot-size: 8px;
+  --star-size: 24px;
+}
+
+.xl {
+  --spark-size: 50px;
+  --dot-size: 10px;
+  --star-size: 30px;
+}
+
+@keyframes dot-state {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  10% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(0.97);
+  }
+
+  20% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  30% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+
+  40% {
+    opacity: 0.25;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+
+  48%,
+  52% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.65);
+  }
+
+  60% {
+    opacity: 0.25;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+
+  70% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+
+  80% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  90% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(0.97);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes star-state {
+  0% {
+    opacity: 0;
+    filter: brightness(1);
+    transform: translate(-50%, -50%) scale(0.15);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.55);
+  }
+
+  52%,
+  62% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  78% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.55);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .brandSpark::before,
+  .brandSpark::after {
+    animation: none;
+  }
+
+  .brandSpark::after {
+    display: none;
+  }
+}
