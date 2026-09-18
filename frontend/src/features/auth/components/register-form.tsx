@@ -52,7 +52,7 @@ export function RegisterForm() {
       />
 
       <button
-        className="bg-primary text-primary-foreground hover:bg-primary-hover hover:shadow-[0_0_0_1px_var(--color-primary-glow),0_0_22px_var(--color-primary-glow)] focus-visible:outline-primary mt-2 h-12 w-full rounded-lg px-4 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60"
+        className="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:outline-primary mt-2 h-12 w-full rounded-lg px-4 text-sm font-semibold transition-colors hover:shadow-[0_0_0_1px_var(--color-primary-glow),0_0_22px_var(--color-primary-glow)] disabled:cursor-not-allowed disabled:opacity-60"
         type="submit"
       >
         Create account
@@ -64,16 +64,23 @@ export function RegisterForm() {
         By creating an account, you agree to our{" "}
         <Link
           className="text-foreground decoration-border hover:text-primary underline underline-offset-4"
-          href="#"
+          href="/legal/terms"
         >
           Terms of Service
+        </Link>{" "}
+        and acknowledge our{" "}
+        <Link
+          className="text-foreground decoration-border hover:text-primary underline underline-offset-4"
+          href="/legal/privacy"
+        >
+          Privacy Policy
         </Link>{" "}
         and{" "}
         <Link
           className="text-foreground decoration-border hover:text-primary underline underline-offset-4"
-          href="#"
+          href="/legal/cookies"
         >
-          Privacy Policy
+          Cookie Policy
         </Link>
         .
       </p>
