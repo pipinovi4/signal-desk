@@ -69,7 +69,7 @@ class UserRead(BaseSchema):
     id: UUID
     email: EmailStr
     display_name: str
-    username: str
+    username: str | None
 
 
 class UserUpdate(BaseSchema):

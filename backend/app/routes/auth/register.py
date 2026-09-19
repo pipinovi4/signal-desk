@@ -1,21 +1,16 @@
-from typing import Annotated
+from fastapi import APIRouter, Request, Response
 
-from fastapi import APIRouter, Depends, Request, Response
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from app.db.session import get_db_session
 from app.models.user import User
 from app.schemas.auth.auth import RegisterSchema
 from app.schemas.user import UserCreate, UserRead
 from app.services.auth.register import register as register_handler
-from app.services.auth.set_auth_cookies import set_auth_cookies
-from app.services.auth.tokens import Tokens
+from app.services.session.set_auth_cookies import set_auth_cookies
+from app.services.session.tokens import Tokens
+from app.utils import DbSession
 
 router = APIRouter(
     tags=["register"],
 )
-
-DbSession = Annotated[AsyncSession, Depends(get_db_session)]
 
 
 @router.post("/register", response_model=UserRead)

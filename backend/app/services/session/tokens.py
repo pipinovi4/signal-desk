@@ -6,8 +6,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.settings import settings
 from app.models.auth_session import AuthSession
-from app.services.auth.access_token_manager import AccessTokenManager
-from app.services.auth.refresh_token_manager import RefreshTokenManager
+from app.services.session.access_token_manager import AccessTokenManager
+from app.services.session.refresh_token_manager import RefreshTokenManager
 
 
 class InvalidCredentialsError(Exception):

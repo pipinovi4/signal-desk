@@ -24,7 +24,7 @@ export function AuthCard({ title, subtitle, children }: AuthCardProps) {
           <Link
             href="/"
             aria-label="Back to SignalDesk home"
-            className="focus-visible:outline-primary inline-flex cursor-pointer rounded-sm transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4"
+            className="focus-visible:outline-primary inline-flex cursor-pointer rounded-sm transition-opacity focus-visible:outline-2 focus-visible:outline-offset-4"
           >
             <BrandLogo className="h-9 w-44 sm:h-10 sm:w-50" priority />
           </Link>
