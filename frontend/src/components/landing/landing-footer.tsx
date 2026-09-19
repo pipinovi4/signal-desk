@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { BrandSpark } from "@/components/brand-spark";
+import { BrandLogo } from "@/components/brand-logo";
 
 const footerLinks = [
   { href: "/legal/privacy", label: "Privacy" },
@@ -16,12 +16,10 @@ export function LandingFooter() {
       <div className="mx-auto flex max-w-7xl flex-col gap-6 sm:flex-row sm:items-center">
         <Link
           href="/"
-          className="focus-visible:outline-primary flex items-center gap-1 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4"
+          className="focus-visible:outline-primary flex rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4"
+          aria-label="SignalDesk home"
         >
-          <BrandSpark size="sm" />
-          <span className="text-foreground text-xs font-semibold tracking-[0.22em] uppercase">
-            SignalDesk
-          </span>
+          <BrandLogo className="h-7 w-36" />
         </Link>
         <nav
           aria-label="Footer navigation"

@@ -1,5 +1,8 @@
 import Link from "next/link";
+
+import { BrandLogo } from "@/components/brand-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
+
 import styles from "./not-found.module.css";
 
 export default function NotFound() {
@@ -7,13 +10,13 @@ export default function NotFound() {
     <main className={styles.page}>
       <ThemeToggle className="fixed top-4 right-4 z-10 sm:top-6 sm:right-6" />
       <section className={styles.content}>
-        <div className={styles.brand}>
-          <span className={styles.brandSpark} aria-hidden="true" />
-
-          <span className="text-foreground/80 text-xs font-semibold tracking-[0.24em] uppercase">
-            SignalDesk
-          </span>
-        </div>
+        <Link
+          href="/"
+          className="focus-visible:outline-primary mb-10 flex rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4"
+          aria-label="SignalDesk home"
+        >
+          <BrandLogo className="h-8 w-40 sm:h-9 sm:w-44" priority />
+        </Link>
 
         <div className={styles.error}>
           <div className={styles.signalLine} aria-hidden="true">

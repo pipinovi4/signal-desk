@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { BrandSpark } from "@/components/brand-spark";
+import { BrandLogo } from "@/components/brand-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 const navigation = [
@@ -19,13 +19,10 @@ export function LandingHeader() {
       >
         <Link
           href="/"
-          className="focus-visible:outline-primary flex shrink-0 items-center gap-1.5 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4"
+          className="focus-visible:outline-primary flex shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4"
           aria-label="SignalDesk home"
         >
-          <BrandSpark size="sm" animated />
-          <span className="text-foreground text-xs font-semibold tracking-[0.24em] uppercase sm:text-sm">
-            SignalDesk
-          </span>
+          <BrandLogo className="h-7 w-36 sm:h-8 sm:w-40" priority />
         </Link>
 
         <div className="hidden items-center gap-7 md:flex">

@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from sqlalchemy import DateTime, ForeignKey, String
+from sqlalchemy.dialects.postgresql import INET
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -54,4 +55,9 @@ class AuthSession(Base, UUIDMixin, TimestampMixin):
 
     user: Mapped[User] = relationship(
         back_populates="auth_sessions",
+    )
+
+    agent_ip: Mapped[str | None] = mapped_column(
+        INET,
+        nullable=True,
     )

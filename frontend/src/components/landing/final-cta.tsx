@@ -1,13 +1,13 @@
 import Link from "next/link";
 
-import { BrandSpark } from "@/components/brand-spark";
+import { BrandLogo } from "@/components/brand-logo";
 
 export function FinalCta() {
   return (
     <section className="px-5 py-24 sm:px-8 sm:py-32 lg:px-12 lg:py-40">
       <div className="mx-auto max-w-4xl text-center">
         <div className="mb-7 flex justify-center">
-          <BrandSpark size="lg" animated delay={250} duration={900} />
+          <BrandLogo className="size-16 sm:size-18" variant="mark" />
         </div>
         <h2 className="text-foreground text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
           Stop checking everything.

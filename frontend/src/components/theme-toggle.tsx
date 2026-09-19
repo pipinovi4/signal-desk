@@ -15,6 +15,17 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
 
     root.dataset.theme = nextTheme;
 
+    const favicon = document.getElementById("signaldesk-favicon");
+
+    if (favicon) {
+      favicon.setAttribute(
+        "href",
+        nextTheme === "light"
+          ? "/signal-desk-favicon-light.png"
+          : "/signal-desk-favicon-dark.png",
+      );
+    }
+
     try {
       localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
     } catch {

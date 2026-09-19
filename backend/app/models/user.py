@@ -2,7 +2,6 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, DateTime, String, true
-from sqlalchemy.dialects.postgresql import INET
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db import Base
@@ -71,9 +70,4 @@ class User(Base, UUIDMixin, TimestampMixin):
         default=True,
         server_default=true(),
         nullable=False,
-    )
-
-    agent_ip: Mapped[str | None] = mapped_column(
-        INET,
-        nullable=True,
     )

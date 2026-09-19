@@ -1,0 +1,43 @@
+.logo {
+  position: relative;
+  display: inline-block;
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+
+.wordmark {
+  aspect-ratio: 5.1 / 1;
+}
+
+.mark {
+  aspect-ratio: 1;
+  border-radius: 22%;
+}
+
+.image {
+  object-fit: contain;
+}
+
+.dark {
+  display: block;
+}
+
+.light {
+  display: none;
+}
+
+.wordmark .dark {
+  mix-blend-mode: screen;
+}
+
+.wordmark .light {
+  mix-blend-mode: multiply;
+}
+
+:global(html[data-theme="light"]) .dark {
+  display: none;
+}
+
+:global(html[data-theme="light"]) .light {
+  display: block;
+}
