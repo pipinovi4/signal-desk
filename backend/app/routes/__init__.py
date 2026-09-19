@@ -2,7 +2,11 @@ from fastapi import APIRouter
 
 
 def create_api_router() -> APIRouter:
-    router = APIRouter(prefix="/v0.1.0", tags=["api"])
+    from app.routes.auth import create_auth_router
+
+    router = APIRouter(prefix="/v1", tags=["api"])
+
+    router.include_router(create_auth_router())
 
     return router
 

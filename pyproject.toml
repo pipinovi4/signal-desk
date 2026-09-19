@@ -14,6 +14,7 @@ dependencies = [
   # Backend API and ASGI server
   "fastapi>=0.141.1,<0.142",
   "uvicorn>=0.52.4,<0.53",
+  "PyJWT>=2.10,<3",
   # Telegram bot
   "aiogram>=3.31.0,<4",
   # Async ORM and PostgreSQL driver

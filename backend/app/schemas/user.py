@@ -58,6 +58,13 @@ class UserOut(UserProfile):
     updated_at: datetime
 
 
+class UserCreate(BaseSchema):
+    username: str
+    display_name: str
+    email: EmailStr
+    password: str
+
+
 class UserUpdate(BaseSchema):
     username: str | None = Field(
         default=None,

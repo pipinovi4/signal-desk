@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -20,6 +21,9 @@ class Settings(BaseSettings):
     JWT_ALGO: str
     ACCESS_EXPIRE_SECONDS: int
     REFRESH_EXPIRE_SECONDS: int
+    SECURE: bool
+    SAMESITE: Literal["lax", "strict", "none"] = "strict"
+    PATH: str
 
     # App
     FRONTEND_URL: str

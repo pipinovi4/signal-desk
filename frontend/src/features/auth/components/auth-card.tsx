@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { BrandLogo } from "@/components/brand-logo";
@@ -20,7 +21,13 @@ export function AuthCard({ title, subtitle, children }: AuthCardProps) {
     >
       <div className="mb-8 text-center">
         <div className="mb-5 flex items-center justify-center">
-          <BrandLogo className="h-9 w-44 sm:h-10 sm:w-50" priority />
+          <Link
+            href="/"
+            aria-label="Back to SignalDesk home"
+            className="focus-visible:outline-primary inline-flex cursor-pointer rounded-sm transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4"
+          >
+            <BrandLogo className="h-9 w-44 sm:h-10 sm:w-50" priority />
+          </Link>
         </div>
 
         <h1 className="text-foreground text-2xl font-semibold tracking-tight sm:text-[26px]">
