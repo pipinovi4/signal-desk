@@ -21,7 +21,7 @@ export function AuthCard({ title, subtitle, children }: AuthCardProps) {
           className="mb-5 flex items-center justify-center"
           aria-label="SignalDesk"
         >
-          <BrandSpark size="lg" delay={300} duration={1000}/>
+          <BrandSpark size="lg" delay={300} duration={1000} animated={true}/>
           <span className="text-foreground/80 text-xs font-semibold tracking-[0.24em] uppercase">
             SignalDesk
           </span>
