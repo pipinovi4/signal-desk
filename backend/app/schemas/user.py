@@ -65,6 +65,13 @@ class UserCreate(BaseSchema):
     password: str
 
 
+class UserRead(BaseSchema):
+    id: UUID
+    email: EmailStr
+    display_name: str
+    username: str
+
+
 class UserUpdate(BaseSchema):
     username: str | None = Field(
         default=None,

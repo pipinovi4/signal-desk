@@ -23,7 +23,7 @@ USER signaldesk
 
 EXPOSE 8000
 
-CMD ["uvicorn", "backend.main:signal_desk_app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["python", "-m", "uvicorn", "backend.main:signal_desk_app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 
 FROM base AS production
@@ -34,4 +34,4 @@ USER signaldesk
 
 EXPOSE 8000
 
-CMD ["uvicorn", "backend.main:signal_desk_app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-m", "uvicorn", "backend.main:signal_desk_app", "--host", "0.0.0.0", "--port", "8000"]

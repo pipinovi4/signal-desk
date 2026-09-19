@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     REFRESH_EXPIRE_SECONDS: int
     SECURE: bool
     SAMESITE: Literal["lax", "strict", "none"] = "strict"
-    PATH: str
+    COOKIE_PATH: str
 
     # App
     FRONTEND_URL: str

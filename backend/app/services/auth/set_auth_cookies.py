@@ -14,7 +14,7 @@ def set_auth_cookies(response: Response, access_token: str, refresh_token: str) 
         httponly=True,
         secure=settings.SECURE,
         samesite=settings.SAMESITE,
-        path=settings.PATH,
+        path=settings.COOKIE_PATH,
     )
 
     response.set_cookie(
@@ -24,5 +24,5 @@ def set_auth_cookies(response: Response, access_token: str, refresh_token: str) 
         httponly=True,
         secure=settings.SECURE,
         samesite=settings.SAMESITE,
-        path=settings.PATH,
+        path=settings.COOKIE_PATH,
     )
