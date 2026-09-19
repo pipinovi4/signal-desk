@@ -4,7 +4,7 @@ from app.models.user import User
 from app.schemas.auth.auth import RegisterSchema
 from app.schemas.user import UserCreate, UserRead
 from app.services.auth.register import register as register_handler
-from app.services.session.set_auth_cookies import set_auth_cookies
+from app.services.session.cookies.set_auth_cookies import set_auth_cookies
 from app.services.session.tokens import Tokens
 from app.utils import DbSession
 

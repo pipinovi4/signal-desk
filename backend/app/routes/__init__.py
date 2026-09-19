@@ -3,10 +3,12 @@ from fastapi import APIRouter
 
 def create_api_router() -> APIRouter:
     from app.routes.auth import create_auth_router
+    from app.routes.session import create_session_router
 
     router = APIRouter(prefix="/v1", tags=["api"])
 
     router.include_router(create_auth_router())
+    router.include_router(create_session_router())
 
     return router
 

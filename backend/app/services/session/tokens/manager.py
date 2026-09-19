@@ -6,8 +6,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.settings import settings
 from app.models.auth_session import AuthSession
-from app.services.session.access_token_manager import AccessTokenManager
-from app.services.session.refresh_token_manager import RefreshTokenManager
+from app.services.session.tokens.access_token_manager import AccessTokenManager
+from app.services.session.tokens.refresh_token_manager import RefreshTokenManager
 
 
 class InvalidCredentialsError(Exception):
@@ -58,3 +58,17 @@ class Tokens:
             raise InvalidCredentialsError
 
         return session
+
+    @staticmethod
+    async def rotate_refresh_token(
+        session: AuthSession,
+        db: AsyncSession,
+    ) -> str:
+        refresh_token = RefreshTokenManager.generate()
+
+        session.refresh_token_hash = RefreshTokenManager.hash(refresh_token)
+        session.expires_at = datetime.now(UTC) + timedelta(seconds=settings.REFRESH_EXPIRE_SECONDS)
+
+        await db.flush()
+
+        return refresh_token

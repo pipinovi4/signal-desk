@@ -3,7 +3,7 @@ from fastapi import APIRouter, Request, Response
 from app.schemas.auth.auth import LoginSchema
 from app.schemas.user import UserRead
 from app.services.auth.login import login as login_handler
-from app.services.session.set_auth_cookies import set_auth_cookies
+from app.services.session.cookies.set_auth_cookies import set_auth_cookies
 from app.services.session.tokens import Tokens
 from app.utils import DbSession
 
