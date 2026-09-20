@@ -6,7 +6,7 @@ from app.services.session.cookies.clear_auth_cookies import clear_auth_cookies
 from app.services.session.tokens.manager import Tokens
 from app.utils.db_session import DbSession
 
-router = APIRouter(tags=["auth"])
+router = APIRouter(tags=["logout"])
 
 
 @router.post("/logout")
