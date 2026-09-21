@@ -1,9 +1,13 @@
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Iterator
 
 import app.models  # noqa: F401
 import pytest
 import pytest_asyncio
 from app.db import Base
+from app.db.session import get_db_session
+from fastapi import FastAPI
+from httpx import ASGITransport, AsyncClient
+from main import create_app
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -77,3 +81,33 @@ async def db_session(
 
             if outer_transaction.is_active:
                 await outer_transaction.rollback()
+
+
+@pytest.fixture
+async def test_app(
+    db_session: AsyncSession,
+) -> Iterator[FastAPI]:
+    app = create_app()
+
+    async def override_db_session() -> AsyncIterator[AsyncSession]:
+        yield db_session
+
+    app.dependency_overrides[get_db_session] = override_db_session
+
+    try:
+        yield app
+    finally:
+        app.dependency_overrides.pop(get_db_session, None)
+
+
+@pytest_asyncio.fixture
+async def client(
+    test_app: FastAPI,
+) -> AsyncIterator[AsyncClient]:
+    transport = ASGITransport(app=test_app)
+
+    async with AsyncClient(
+        transport=transport,
+        base_url="https://testserver",
+    ) as async_client:
+        yield async_client

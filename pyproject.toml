@@ -14,40 +14,37 @@ license = { file = "LICENSE" }
 
 dependencies = [
 
-# Backend API and ASGI server
+  # Backend API and ASGI server
 
-"fastapi>=0.141.1,<0.142",
-"uvicorn>=0.52.4,<0.53",
-"PyJWT>=2.10,<3",
+  "fastapi>=0.141.1,<0.142",
+  "uvicorn>=0.52.4,<0.53",
+  "PyJWT>=2.10,<3",
+  # Telegram bot
 
-# Telegram bot
+  "aiogram>=3.31.0,<4",
+  # Async ORM and PostgreSQL driver
 
-"aiogram>=3.31.0,<4",
+  "sqlalchemy[asyncio]>=2.0.52,<2.1",
+  "asyncpg>=0.31.0,<0.32",
+  # Shared validation and settings management; keep compatible with aiogram
 
-# Async ORM and PostgreSQL driver
-
-"sqlalchemy[asyncio]>=2.0.52,<2.1",
-"asyncpg>=0.31.0,<0.32",
-
-# Shared validation and settings management; keep compatible with aiogram
-
-"pydantic>=2.13.5,<2.14",
-"pydantic-settings>=2.10,<3",
-"email-validator>=2.2,<3",
-
-"alembic>=1.16,<2",
-"uuid6>=2025.0.1,<2026",
+  "pydantic>=2.13.5,<2.14",
+  "pydantic-settings>=2.10,<3",
+  "email-validator>=2.2,<3",
+  "alembic>=1.16,<2",
+  "uuid6>=2025.0.1,<2026",
+  "httpx>=0.28.1"
 ]
 
 [project.optional-dependencies]
 dev = [
-"ruff==0.16.7",
-"mypy==2.3.1",
-"pytest==9.1.1",
-"pytest-asyncio==1.4.0",
-"pre-commit==4.6.2",
-"watchfiles==1.1.1",
-"pwdlib[argon2]>=0.3,<1",
+  "ruff==0.16.7",
+  "mypy==2.3.1",
+  "pytest==9.1.1",
+  "pytest-asyncio==1.4.0",
+  "pre-commit==4.6.2",
+  "watchfiles==1.1.1",
+  "pwdlib[argon2]>=0.3,<1",
 ]
 
 [tool.setuptools]
@@ -67,8 +64,8 @@ target-version = "py312"
 line-length = 100
 src = [".", "ai-worker"]
 extend-exclude = [
-".git", ".venv", "venv", "**pycache**", ".mypy_cache",
-".pytest_cache", ".ruff_cache", "build", "dist",
+  ".git", ".venv", "venv", "**pycache**", ".mypy_cache",
+  ".pytest_cache", ".ruff_cache", "build", "dist",
 ]
 
 [tool.ruff.lint]
@@ -93,8 +90,8 @@ show_error_codes = true
 pretty = true
 plugins = ["pydantic.mypy"]
 mypy_path = [
-"$MYPY_CONFIG_FILE_DIR/backend",
-"$MYPY_CONFIG_FILE_DIR/ai-worker",
+  "$MYPY_CONFIG_FILE_DIR/backend",
+  "$MYPY_CONFIG_FILE_DIR/ai-worker",
 ]
 explicit_package_bases = true
 exclude = [
