@@ -1,14 +1,11 @@
 from pydantic import EmailStr
 
-from app.schemas.auth.password import RegistrationPassword
 from app.schemas.base import BaseSchema
+from app.schemas.user import UserCreate
 
 
-class RegisterSchema(BaseSchema):
-    email: EmailStr
-    password: RegistrationPassword
-    display_name: str
-    username: str
+class RegisterSchema(UserCreate):
+    pass
 
 
 class LoginSchema(BaseSchema):

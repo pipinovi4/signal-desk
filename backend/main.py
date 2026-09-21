@@ -5,6 +5,7 @@ import logging
 from app.core.lifespan import lifespan
 from app.core.settings import settings
 from app.routes import create_api_router
+from app.routes.exception_handlers import register_exception_handlers
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -22,6 +23,7 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    register_exception_handlers(app)
     app.include_router(create_api_router())
 
     return app

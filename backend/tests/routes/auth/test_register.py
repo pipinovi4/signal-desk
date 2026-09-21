@@ -1,10 +1,12 @@
+from typing import Never
+
 import pytest
 from app.core.settings import settings
-from app.models import User
+from app.models import AuthSession, PasswordCredential, User
 from app.services.auth.password import PasswordManager
-from app.services.session.tokens import RefreshTokenManager
+from app.services.session.tokens import AccessTokenManager, RefreshTokenManager, Tokens
 from httpx import AsyncClient
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -120,6 +122,16 @@ async def test_register_persists_user_credentials_and_auth_session(
     assert RefreshTokenManager.verify(
         token=raw_refresh_token, expected_hash=auth_session.refresh_token_hash
     )
+
+    raw_access_token = response.cookies.get("access_token")
+
+    assert raw_access_token is not None
+
+    access_claims = AccessTokenManager.decode(raw_access_token)
+
+    assert access_claims["sub"] == str(user.id)
+    assert access_claims["sid"] == str(auth_session.id)
+    assert access_claims["type"] == "access"
 
 
 @pytest.mark.parametrize(
@@ -240,3 +252,212 @@ async def test_register_accepts_password_at_length_boundaries(
 
     # Assert
     assert response.status_code == 200
+
+
+@pytest.mark.parametrize(
+    ("email", "username"),
+    [
+        (
+            "existing@example.com",
+            "different_username",
+        ),
+        (
+            "different@example.com",
+            "existing_username",
+        ),
+    ],
+    ids=[
+        "duplicate-email",
+        "duplicate-username",
+    ],
+)
+async def test_register_returns_conflict_for_duplicate_identity(
+    client: AsyncClient,
+    email: str,
+    username: str,
+) -> None:
+    # Arrange
+    existing_payload = {
+        "email": "existing@example.com",
+        "username": "existing_username",
+        "display_name": "Existing User",
+        "password": "ExistingPassword123!",
+    }
+    first_response = await client.post(
+        "/v1/auth/register",
+        json=existing_payload,
+    )
+    assert first_response.status_code == 200
+
+    duplicate_payload = {
+        "email": email,
+        "username": username,
+        "display_name": "Duplicate User",
+        "password": "DuplicatePassword123!",
+    }
+
+    # Act
+    response = await client.post(
+        "/v1/auth/register",
+        json=duplicate_payload,
+    )
+
+    # Assert
+    assert response.status_code == 409
+    assert response.json() == {"detail": "A user with this email or username already exists"}
+
+
+async def test_register_rolls_back_if_auth_session_creation_fails(
+    client: AsyncClient,
+    db_session: AsyncSession,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    # Arrange
+    error_message = "Simulated auth session creation failure"
+
+    async def fail_to_create_auth_session(**_kwargs: object) -> Never:
+        raise RuntimeError(error_message)
+
+    monkeypatch.setattr(
+        Tokens,
+        "create_refresh_token",
+        fail_to_create_auth_session,
+    )
+
+    payload = {
+        "email": "rollback@example.com",
+        "username": "rollback_user",
+        "display_name": "Rollback User",
+        "password": "RollbackPassword123!",
+    }
+
+    # Act / Assert
+    with pytest.raises(RuntimeError, match=error_message):
+        await client.post(
+            "/v1/auth/register",
+            json=payload,
+        )
+
+    db_session.expunge_all()
+
+    user_count = await db_session.scalar(select(func.count()).select_from(User))
+    credential_count = await db_session.scalar(select(func.count()).select_from(PasswordCredential))
+    auth_session_count = await db_session.scalar(select(func.count()).select_from(AuthSession))
+
+    assert user_count == 0
+    assert credential_count == 0
+    assert auth_session_count == 0
+
+
+@pytest.mark.parametrize(
+    "invalid_username",
+    [
+        "",
+        "ab",
+        "a" * 33,
+        "invalid-username",
+        "admin",
+    ],
+    ids=[
+        "empty",
+        "shorter-than-three",
+        "longer-than-32",
+        "invalid-character",
+        "reserved",
+    ],
+)
+async def test_register_rejects_invalid_username(
+    client: AsyncClient,
+    invalid_username: str,
+) -> None:
+    payload = {
+        "email": "invalid-username@example.com",
+        "username": invalid_username,
+        "display_name": "Valid Display Name",
+        "password": "ValidPassword123!",
+    }
+
+    response = await client.post(
+        "/v1/auth/register",
+        json=payload,
+    )
+
+    assert response.status_code == 422
+
+    errors = response.json()["detail"]
+
+    assert any(error["loc"] == ["body", "username"] for error in errors)
+
+
+@pytest.mark.parametrize(
+    "invalid_display_name",
+    [
+        "",
+        "ab",
+        "a" * 33,
+    ],
+    ids=[
+        "empty",
+        "shorter-than-three",
+        "longer-than-32",
+    ],
+)
+async def test_register_rejects_invalid_display_name(
+    client: AsyncClient,
+    invalid_display_name: str,
+) -> None:
+    payload = {
+        "email": "invalid-display-name@example.com",
+        "username": "valid_username",
+        "display_name": invalid_display_name,
+        "password": "ValidPassword123!",
+    }
+
+    response = await client.post(
+        "/v1/auth/register",
+        json=payload,
+    )
+
+    assert response.status_code == 422
+
+    errors = response.json()["detail"]
+
+    assert any(error["loc"] == ["body", "display_name"] for error in errors)
+
+
+@pytest.mark.parametrize(
+    "missing_field",
+    [
+        "email",
+        "password",
+        "username",
+        "display_name",
+    ],
+)
+async def test_register_rejects_missing_required_field(
+    client: AsyncClient,
+    missing_field: str,
+) -> None:
+    payload = {
+        "email": "missing-field@example.com",
+        "username": "missing_field",
+        "display_name": "Missing Field",
+        "password": "ValidPassword123!",
+    }
+    payload.pop(missing_field)
+
+    response = await client.post(
+        "/v1/auth/register",
+        json=payload,
+    )
+
+    assert response.status_code == 422
+
+    errors = response.json()["detail"]
+
+    assert any(
+        error["loc"] == ["body", missing_field] and error["type"] == "missing" for error in errors
+    )
+
+    assert response.cookies.get("access_token") is None
+    assert response.cookies.get("refresh_token") is None
