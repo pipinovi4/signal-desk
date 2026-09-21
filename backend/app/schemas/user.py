@@ -11,6 +11,7 @@ from app.constants import (
     USERNAME_MIN_LENGTH,
     USERNAME_PATTERN,
 )
+from app.schemas.auth.password import RegistrationPassword
 from app.schemas.base import BaseSchema
 
 
@@ -62,7 +63,7 @@ class UserCreate(BaseSchema):
     username: str
     display_name: str
     email: EmailStr
-    password: str
+    password: RegistrationPassword
 
 
 class UserRead(BaseSchema):
