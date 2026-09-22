@@ -1,8 +1,8 @@
 import pytest
+from app.errors import UserAlreadyExistsError
 from app.models import PasswordCredential
 from app.schemas.user import UserCreate
 from app.services.auth.password import PasswordManager
-from app.services.auth.register import UserAlreadyExistsError
 from app.services.auth.register import register as register_user
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -15,7 +15,7 @@ async def test_register_creates_user_and_password_credential(
     data = UserCreate(
         email="Random-Email@Example.COM",
         password=password,
-        username="Random-Username",
+        username="Random_Username",
         display_name="random-display-name",
     )
 
@@ -26,14 +26,21 @@ async def test_register_creates_user_and_password_credential(
     )
 
     # Assert
-    credential = await db_session.get(PasswordCredential, user.id)
+    credential = await db_session.get(
+        PasswordCredential,
+        user.id,
+    )
 
     assert user.email == "random-email@example.com"
-    assert user.username == "random-username"
+    assert user.username == "random_username"
     assert user.display_name == "random-display-name"
+
     assert credential is not None
     assert credential.password_hash != password
-    assert PasswordManager.verify(password, credential.password_hash)
+    assert PasswordManager.verify(
+        password,
+        credential.password_hash,
+    )
 
 
 @pytest.mark.parametrize(

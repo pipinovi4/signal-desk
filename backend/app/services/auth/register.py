@@ -2,14 +2,11 @@ from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.elements import ColumnElement
 
+from app.errors import UserAlreadyExistsError
 from app.models import PasswordCredential
 from app.models.user import User
 from app.schemas.user import UserCreate
 from app.services.auth.password import PasswordManager
-
-
-class UserAlreadyExistsError(Exception):
-    pass
 
 
 async def register(

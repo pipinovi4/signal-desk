@@ -1,23 +1,29 @@
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from app.services.auth.register import UserAlreadyExistsError
+from app.errors import ApplicationError
 
 
-async def handle_user_already_exists(
+async def handle_application_error(
     _request: Request,
-    _error: Exception,
+    error: Exception,
 ) -> JSONResponse:
+    if not isinstance(error, ApplicationError):
+        raise error
+
     return JSONResponse(
-        status_code=status.HTTP_409_CONFLICT,
+        status_code=error.status_code,
         content={
-            "detail": "A user with this email or username already exists",
+            "error": {
+                "code": error.code,
+                "message": error.detail,
+            },
         },
     )
 
 
 def register_exception_handlers(app: FastAPI) -> None:
     app.add_exception_handler(
-        UserAlreadyExistsError,
-        handle_user_already_exists,
+        ApplicationError,
+        handle_application_error,
     )

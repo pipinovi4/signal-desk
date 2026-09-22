@@ -304,7 +304,12 @@ async def test_register_returns_conflict_for_duplicate_identity(
 
     # Assert
     assert response.status_code == 409
-    assert response.json() == {"detail": "A user with this email or username already exists"}
+    assert response.json() == {
+        "error": {
+            "code": "user_already_exists",
+            "message": "A user with this email or username already exists",
+        },
+    }
 
 
 async def test_register_rolls_back_if_auth_session_creation_fails(

@@ -5,13 +5,10 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.settings import settings
+from app.errors import InvalidCredentialsError
 from app.models.auth_session import AuthSession
 from app.services.session.tokens.access_token_manager import AccessTokenManager
 from app.services.session.tokens.refresh_token_manager import RefreshTokenManager
-
-
-class InvalidCredentialsError(Exception):
-    pass
 
 
 class Tokens:
