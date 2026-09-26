@@ -1,85 +1,109 @@
-from types import SimpleNamespace
-from unittest.mock import AsyncMock
+from app.core.settings import settings
+from app.models import AuthSession
+from app.services.session.tokens import Tokens
+from httpx import AsyncClient
+from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
-import pytest
-from app.routes.session import logout as logout_module
-from app.services.session.tokens.manager import Tokens
-from fastapi import Request, Response
-
-
-def make_request(*, refresh_token: str | None = None) -> Request:
-    headers: list[tuple[bytes, bytes]] = []
-
-    if refresh_token is not None:
-        headers.append((b"cookie", f"refresh_token={refresh_token}".encode()))
-
-    return Request(
-        {
-            "type": "http",
-            "method": "POST",
-            "path": "/v1/session/logout",
-            "headers": headers,
-        }
-    )
+from tests.conftest import RegisteredUserFactory
 
 
-def assert_auth_cookies_cleared(response: Response) -> None:
-    set_cookie_headers = response.headers.getlist("set-cookie")
+def assert_auth_cookies_cleared(response_headers: list[str]) -> None:
+    assert len(response_headers) == 2
+    assert any(header.startswith("access_token=") for header in response_headers)
+    assert any(header.startswith("refresh_token=") for header in response_headers)
 
-    assert len(set_cookie_headers) == 2
-    assert any(header.startswith("access_token=") for header in set_cookie_headers)
-    assert any(header.startswith("refresh_token=") for header in set_cookie_headers)
+    for header in response_headers:
+        attributes = {part.strip().lower() for part in header.split(";")[1:]}
 
-    for header in set_cookie_headers:
-        assert "Max-Age=0" in header
-        assert "HttpOnly" in header
+        assert "httponly" in attributes
+        assert "max-age=0" in attributes
+        assert f"path={settings.COOKIE_PATH.lower()}" in attributes
+        assert f"samesite={settings.SAMESITE.lower()}" in attributes
+        assert ("secure" in attributes) is settings.SECURE
 
 
-@pytest.mark.asyncio
 async def test_logout_revokes_session_and_clears_auth_cookies(
-    monkeypatch: pytest.MonkeyPatch,
+    client: AsyncClient,
+    db_session: AsyncSession,
+    registered_user_factory: RegisteredUserFactory,
 ) -> None:
-    session = SimpleNamespace(revoked_at=None)
-    verify_refresh_token = AsyncMock(return_value=session)
-    monkeypatch.setattr(Tokens, "verify_refresh_token", verify_refresh_token)
+    # Arrange
+    user = await registered_user_factory(
+        email="logout-user@example.com",
+        username="logout_user",
+        display_name="Logout User",
+    )
+    await db_session.commit()
 
-    db = SimpleNamespace(commit=AsyncMock())
-    response = Response()
+    refresh_token, created_session = await Tokens.create_refresh_token(
+        user_id=user.id,
+        agent_ip="127.0.0.1",
+        user_agent="logout-tests",
+        db=db_session,
+    )
+    await db_session.commit()
+    created_session_id = created_session.id
 
-    result = await logout_module.logout(
-        request=make_request(refresh_token="raw-refresh-token"),
-        response=response,
-        db=db,
+    # Act
+    response = await client.post(
+        "/v1/session/logout",
+        headers={
+            "cookie": (f"access_token=access-token; refresh_token={refresh_token}"),
+        },
     )
 
-    assert result is response
-    verify_refresh_token.assert_awaited_once_with(
-        refresh_token="raw-refresh-token",
-        db=db,
+    # Assert
+    assert response.status_code == 200
+
+    db_session.expunge_all()
+    persisted_session = await db_session.get(
+        AuthSession,
+        created_session_id,
     )
-    db.commit.assert_awaited_once_with()
-    assert session.revoked_at is not None
-    assert session.revoked_at.tzinfo is not None
-    assert_auth_cookies_cleared(response)
+
+    assert persisted_session is not None
+    assert persisted_session.revoked_at is not None
+    assert persisted_session.revoked_at.tzinfo is not None
+
+    assert_auth_cookies_cleared(response.headers.get_list("set-cookie"))
 
 
-@pytest.mark.asyncio
-async def test_logout_without_refresh_cookie_only_clears_auth_cookies(
-    monkeypatch: pytest.MonkeyPatch,
+async def test_logout_without_refresh_cookie_is_idempotent(
+    client: AsyncClient,
+    db_session: AsyncSession,
 ) -> None:
-    verify_refresh_token = AsyncMock()
-    monkeypatch.setattr(Tokens, "verify_refresh_token", verify_refresh_token)
-
-    db = SimpleNamespace(commit=AsyncMock())
-    response = Response()
-
-    result = await logout_module.logout(
-        request=make_request(),
-        response=response,
-        db=db,
+    # Act
+    response = await client.post(
+        "/v1/session/logout",
+        headers={
+            "cookie": "access_token=access-token",
+        },
     )
 
-    assert result is response
-    verify_refresh_token.assert_not_awaited()
-    db.commit.assert_not_awaited()
-    assert_auth_cookies_cleared(response)
+    # Assert
+    assert response.status_code == 200
+    assert_auth_cookies_cleared(response.headers.get_list("set-cookie"))
+
+    auth_session_count = await db_session.scalar(select(func.count()).select_from(AuthSession))
+    assert auth_session_count == 0
+
+
+async def test_logout_with_invalid_refresh_cookie_is_idempotent(
+    client: AsyncClient,
+    db_session: AsyncSession,
+) -> None:
+    # Act
+    response = await client.post(
+        "/v1/session/logout",
+        headers={
+            "cookie": ("access_token=access-token; refresh_token=invalid-refresh-token"),
+        },
+    )
+
+    # Assert
+    assert response.status_code == 200
+    assert_auth_cookies_cleared(response.headers.get_list("set-cookie"))
+
+    auth_session_count = await db_session.scalar(select(func.count()).select_from(AuthSession))
+    assert auth_session_count == 0

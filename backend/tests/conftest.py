@@ -1,10 +1,13 @@
-from collections.abc import AsyncIterator, Iterator
+from collections.abc import AsyncIterator, Awaitable, Callable, Iterator
 
 import app.models  # noqa: F401
 import pytest
 import pytest_asyncio
 from app.db import Base
 from app.db.session import get_db_session
+from app.models.user import User
+from app.schemas.user import UserCreate
+from app.services.auth.register import register
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 from main import create_app
@@ -111,3 +114,30 @@ async def client(
         base_url="https://testserver",
     ) as async_client:
         yield async_client
+
+
+RegisteredUserFactory = Callable[..., Awaitable[User]]
+
+
+@pytest_asyncio.fixture
+def registered_user_factory(
+    db_session: AsyncSession,
+) -> RegisteredUserFactory:
+    async def create_user(
+        *,
+        email: str = "login-user@example.com",
+        password: str = "ValidPassword123!",
+        username: str = "login_user",
+        display_name: str = "Login User",
+    ) -> User:
+        return await register(
+            data=UserCreate(
+                email=email,
+                password=password,
+                username=username,
+                display_name=display_name,
+            ),
+            db=db_session,
+        )
+
+    return create_user

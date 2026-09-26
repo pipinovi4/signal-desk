@@ -3,7 +3,6 @@
 from datetime import datetime
 from uuid import UUID
 
-from httpx import AsyncClient
 from pydantic import EmailStr, Field, field_validator
 
 from app.constants import (
@@ -12,7 +11,6 @@ from app.constants import (
     USERNAME_MIN_LENGTH,
     USERNAME_PATTERN,
 )
-from app.core.settings import settings
 from app.schemas.auth.password import RegistrationPassword
 from app.schemas.base import BaseSchema
 
@@ -123,54 +121,3 @@ class UserUpdate(BaseSchema):
             raise ValueError("This username is reserved")
 
         return value
-
-
-def get_cookie_header(
-    headers: list[str],
-    cookie_name: str,
-) -> str:
-    return next(header for header in headers if header.startswith(f"{cookie_name}="))
-
-
-async def test_register_sets_secure_auth_cookies(
-    client: AsyncClient,
-) -> None:
-    # Arrange
-    payload = {
-        "email": "cookie-user@example.com",
-        "username": "cookie_user",
-        "display_name": "Cookie User",
-        "password": "ValidPassword123!",
-    }
-
-    # Act
-    response = await client.post(
-        "/v1/auth/register",
-        json=payload,
-    )
-
-    # Assert
-    assert response.status_code == 200
-
-    cookie_headers = response.headers.get_list("set-cookie")
-
-    access_cookie = get_cookie_header(
-        cookie_headers,
-        "access_token",
-    )
-    refresh_cookie = get_cookie_header(
-        cookie_headers,
-        "refresh_token",
-    )
-
-    for cookie in (access_cookie, refresh_cookie):
-        normalized_cookie = cookie.lower()
-
-        assert "httponly" in normalized_cookie
-        assert "path=/" in normalized_cookie
-        assert f"samesite={settings.SAMESITE.lower()}" in normalized_cookie
-
-        if settings.SECURE:
-            assert "secure" in normalized_cookie
-        else:
-            assert "secure" not in normalized_cookie

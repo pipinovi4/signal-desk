@@ -29,6 +29,4 @@ async def login(data: LoginSchema, response: Response, request: Request, db: DbS
 
     set_auth_cookies(access_token=access_token, refresh_token=refresh_token, response=response)
 
-    return UserRead(
-        email=user.email, display_name=user.display_name, username=user.username, id=user.id
-    )
+    return UserRead.model_validate(user)

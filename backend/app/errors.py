@@ -4,16 +4,16 @@ class ApplicationError(Exception):
     detail = "An application error occurred"
 
 
-class InvalidCredentialsError(Exception):
+class InvalidCredentialsError(ApplicationError):
     status_code = 401
     code = "invalid_credentials"
     detail = "Invalid email or password"
 
 
-class UserAlreadyExistsError(Exception):
+class UserAlreadyExistsError(ApplicationError):
     status_code = 409
     code = "user_already_exists"
-    detail = "A use with this email or username already exists "
+    detail = "A user with this email or username already exists"
 
 
 class InvalidRefreshTokenError(ApplicationError):
