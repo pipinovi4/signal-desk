@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Request, Response
+from fastapi import APIRouter, Request, Response, status
 
+from app.errors import ErrorResponse
 from app.models.user import User
 from app.schemas.auth.auth import RegisterSchema
 from app.schemas.user import UserCreate, UserRead
@@ -13,13 +14,33 @@ router = APIRouter(
 )
 
 
-@router.post("/register", response_model=UserRead)
+@router.post(
+    "/register",
+    operation_id="auth_register",
+    response_model=UserRead,
+    summary="Register a user",
+    status_code=status.HTTP_201_CREATED,
+    response_description="The register user's profile",
+    responses={
+        409: {
+            "model": ErrorResponse,
+            "description": "The email or username is already taken.",
+        },
+    },
+)
 async def register(
     data: RegisterSchema,
     request: Request,
     response: Response,
     db: DbSession,
 ) -> User:
+    """
+    Create a user account and start an authenticated session.
+
+    Sets access and refresh tokens as HttpOnly cookies.
+    Tokens are not included in the response body.
+    """
+
     if request.client is None:
         raise RuntimeError("Client address is unavailable")
 

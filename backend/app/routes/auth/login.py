@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Request, Response
+from fastapi import APIRouter, Request, Response, status
 
+from app.errors import ErrorResponse
 from app.schemas.auth.auth import LoginSchema
 from app.schemas.user import UserRead
 from app.services.auth.login import login as login_handler
@@ -10,8 +11,28 @@ from app.utils import DbSession
 router = APIRouter(tags=["login"])
 
 
-@router.post("/login", response_model=UserRead)
+@router.post(
+    "/login",
+    operation_id="auth_login",
+    summary="Log in a user",
+    response_model=UserRead,
+    status_code=status.HTTP_200_OK,
+    response_description="The authenticated user's profile.",
+    responses={
+        status.HTTP_401_UNAUTHORIZED: {
+            "model": ErrorResponse,
+            "description": "The email or password is invalid.",
+        },
+    },
+)
 async def login(data: LoginSchema, response: Response, request: Request, db: DbSession) -> UserRead:
+    """
+    Authenticate a user with their email and password.
+
+    Creates an authentication session and sets access and refresh tokens
+    as HttpOnly cookies. Tokens are not included in the response body.
+    """
+
     if request.client is None:
         raise RuntimeError("Client address is unavailable")
 

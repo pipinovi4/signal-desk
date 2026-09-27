@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, Response
+from fastapi import APIRouter, Request, Response, status
 
 from app.errors import InvalidRefreshTokenError
 from app.services.session.cookies.set_auth_cookies import set_auth_cookies
@@ -8,7 +8,13 @@ from app.utils.db_session import DbSession
 router = APIRouter(tags=["session", "refresh"])
 
 
-@router.post("/refresh")
+@router.post(
+    "/refresh",
+    operation_id="session_refresh",
+    summary="Refresh active session",
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_description="Session refreshed new one's tokens set up",
+)
 async def refresh(
     request: Request,
     response: Response,

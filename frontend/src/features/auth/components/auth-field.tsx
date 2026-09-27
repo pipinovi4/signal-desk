@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useState } from "react";
+
 import styles from "./auth-field.module.css";
 
 type AuthFieldProps = Readonly<{
@@ -14,6 +15,10 @@ type AuthFieldProps = Readonly<{
   isTyping: boolean;
   onTyping: () => void;
   labelAction?: ReactNode;
+  disabled?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
 }>;
 
 export function AuthField({
@@ -26,6 +31,10 @@ export function AuthField({
   isTyping,
   onTyping,
   labelAction,
+  disabled = false,
+  minLength,
+  maxLength,
+  pattern,
 }: AuthFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
@@ -63,7 +72,7 @@ export function AuthField({
       >
         <input
           className={[
-            "border-border bg-surface-secondary text-foreground placeholder:text-muted-foreground/60 hover:border-muted-foreground/50 focus:border-primary focus:ring-primary/25 focus-visible:border-primary focus-visible:ring-primary/25 h-12 w-full rounded-lg border text-sm transition-colors focus:ring-2 focus:outline-none",
+            "border-border bg-surface-secondary text-foreground placeholder:text-muted-foreground/60 hover:border-muted-foreground/50 focus:border-primary focus:ring-primary/25 focus-visible:border-primary focus-visible:ring-primary/25 h-12 w-full rounded-lg border text-sm transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60",
             isPassword ? "pr-12 pl-3.5" : "px-3.5",
           ].join(" ")}
           id={id}
@@ -73,15 +82,20 @@ export function AuthField({
           inputMode={type === "email" ? "email" : undefined}
           placeholder={placeholder}
           required
+          disabled={disabled}
+          minLength={minLength}
+          maxLength={maxLength}
+          pattern={pattern}
           onChange={onTyping}
         />
 
         {isPassword ? (
           <button
-            className="text-muted-foreground hover:text-foreground focus-visible:text-foreground focus-visible:outline-primary absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-r-lg transition-colors"
+            className="text-muted-foreground hover:text-foreground focus-visible:text-foreground focus-visible:outline-primary absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-r-lg transition-colors disabled:cursor-not-allowed disabled:opacity-60"
             type="button"
             aria-label={showPassword ? "Hide password" : "Show password"}
             aria-pressed={showPassword}
+            disabled={disabled}
             onClick={() => setShowPassword((visible) => !visible)}
           >
             {showPassword ? <EyeOffIcon /> : <EyeIcon />}

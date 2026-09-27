@@ -65,7 +65,8 @@ class UserCreate(BaseSchema):
         max_length=USERNAME_MAX_LENGTH,
         pattern=USERNAME_PATTERN,
     )
-    display_name: str = Field(
+    display_name: str | None = Field(
+        default=None,
         min_length=USERNAME_MIN_LENGTH,
         max_length=USERNAME_MAX_LENGTH,
     )

@@ -31,7 +31,7 @@ async def register(
     user = User(
         email=email,
         username=username,
-        display_name=data.display_name,
+        display_name=data.display_name or data.username,
     )
 
     db.add(user)

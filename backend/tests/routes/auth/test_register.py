@@ -394,6 +394,24 @@ async def test_register_rejects_invalid_username(
     assert any(error["loc"] == ["body", "username"] for error in errors)
 
 
+async def test_register_uses_username_when_display_name_is_omitted(
+    client: AsyncClient,
+) -> None:
+    payload = {
+        "email": "without-display-name@example.com",
+        "username": "without_display_name",
+        "password": "ValidPassword123!",
+    }
+
+    response = await client.post(
+        "/v1/auth/register",
+        json=payload,
+    )
+
+    assert response.status_code == 201
+    assert response.json()["display_name"] == payload["username"]
+
+
 @pytest.mark.parametrize(
     "invalid_display_name",
     [
@@ -436,7 +454,6 @@ async def test_register_rejects_invalid_display_name(
         "email",
         "password",
         "username",
-        "display_name",
     ],
 )
 async def test_register_rejects_missing_required_field(

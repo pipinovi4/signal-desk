@@ -1,3 +1,21 @@
+from pydantic import BaseModel, Field
+
+
+class ErrorDetail(BaseModel):
+    code: str = Field(
+        description="Stable error code for programmatic handling.",
+        examples=["invalid_credentials"],
+    )
+    message: str = Field(
+        description="Human-readable error description.",
+        examples=["Invalid email or password"],
+    )
+
+
+class ErrorResponse(BaseModel):
+    error: ErrorDetail
+
+
 class ApplicationError(Exception):
     status_code = 500
     code = "application_error"
