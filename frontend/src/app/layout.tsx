@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+
+import { AuthProvider } from "@/features/auth/context/auth-context";
 import { Space_Grotesk } from "next/font/google";
 
 import "./globals.css";
@@ -59,7 +61,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body className="flex min-h-dvh flex-col font-sans antialiased">
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

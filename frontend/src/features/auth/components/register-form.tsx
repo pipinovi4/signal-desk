@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
 import { useState } from "react";
 
+import { useAuth } from "@/features/auth/context/auth-context";
 import { useTypingSignal } from "@/features/auth/hooks/use-typing-signal";
 import { register } from "@/lib/auth";
 import { HttpError } from "@/lib/http/error";
@@ -16,6 +17,7 @@ type RegistrationField = "username" | "email" | "password";
 
 export function RegisterForm() {
   const router = useRouter();
+  const { setCurrentUser } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const { typingField, markFieldAsTyping } =
@@ -34,13 +36,14 @@ export function RegisterForm() {
     const formData = new FormData(event.currentTarget);
 
     try {
-      await register({
+      const registeredUser = await register({
         username: String(formData.get("username") ?? ""),
         email: String(formData.get("email") ?? ""),
         password: String(formData.get("password") ?? ""),
       });
 
-      router.replace("/");
+      setCurrentUser(registeredUser);
+      router.replace("/dashboard");
       router.refresh();
     } catch (error) {
       if (error instanceof HttpError) {

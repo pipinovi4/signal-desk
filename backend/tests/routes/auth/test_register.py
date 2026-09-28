@@ -5,6 +5,7 @@ from app.core.settings import settings
 from app.models import AuthSession, PasswordCredential, User
 from app.services.auth.password import PasswordManager
 from app.services.session.tokens import AccessTokenManager, RefreshTokenManager, Tokens
+from fastapi import status
 from httpx import AsyncClient
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -30,7 +31,7 @@ async def test_register_returns_user_and_auth_cookies(
 
     # Assert: HTTP response
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_201_CREATED
 
     body = response.json()
 
@@ -77,7 +78,7 @@ async def test_register_persists_user_credentials_and_auth_session(
     )
 
     # Assert: successful request
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_201_CREATED
 
     db_session.expunge_all()
 
@@ -251,7 +252,7 @@ async def test_register_accepts_password_at_length_boundaries(
     )
 
     # Assert
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_201_CREATED
 
 
 @pytest.mark.parametrize(
@@ -287,7 +288,7 @@ async def test_register_returns_conflict_for_duplicate_identity(
         "/v1/auth/register",
         json=existing_payload,
     )
-    assert first_response.status_code == 200
+    assert first_response.status_code == status.HTTP_201_CREATED
 
     duplicate_payload = {
         "email": email,
@@ -510,7 +511,7 @@ async def test_register_sets_secure_auth_cookies(
     )
 
     # Assert
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_201_CREATED
 
     cookie_headers = response.headers.get_list("set-cookie")
 

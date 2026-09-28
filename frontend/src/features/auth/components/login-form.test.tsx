@@ -4,10 +4,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { HttpError } from "@/lib/http/error";
 
-import { RegisterForm } from "./register-form";
+import { LoginForm } from "./login-form";
 
 const mocks = vi.hoisted(() => ({
-  register: vi.fn(),
+  login: vi.fn(),
   replace: vi.fn(),
   refresh: vi.fn(),
   setCurrentUser: vi.fn(),
@@ -18,7 +18,7 @@ vi.mock("@/features/auth/context/auth-context", () => ({
 }));
 
 vi.mock("@/lib/auth", () => ({
-  register: mocks.register,
+  login: mocks.login,
 }));
 
 vi.mock("next/navigation", () => ({
@@ -28,38 +28,31 @@ vi.mock("next/navigation", () => ({
   }),
 }));
 
-describe("RegisterForm", () => {
+describe("LoginForm", () => {
   beforeEach(() => {
-    mocks.register.mockReset();
+    mocks.login.mockReset();
     mocks.replace.mockReset();
     mocks.refresh.mockReset();
     mocks.setCurrentUser.mockReset();
   });
 
-  it("registers the user and redirects after success", async () => {
+  it("logs the user in and redirects after success", async () => {
     const user = userEvent.setup();
-
-    mocks.register.mockResolvedValue({
+    mocks.login.mockResolvedValue({
       id: "019d0000-0000-7000-8000-000000000001",
       email: "alice@example.com",
       username: "alice",
       display_name: "Alice",
     });
 
-    render(<RegisterForm />);
+    render(<LoginForm />);
 
-    await user.type(screen.getByLabelText("Username"), "alice");
     await user.type(screen.getByLabelText("Email"), "alice@example.com");
     await user.type(screen.getByLabelText("Password"), "Password123!");
-    await user.click(
-      screen.getByRole("button", {
-        name: "Create account",
-      }),
-    );
+    await user.click(screen.getByRole("button", { name: "Sign in" }));
 
     await waitFor(() => {
-      expect(mocks.register).toHaveBeenCalledWith({
-        username: "alice",
+      expect(mocks.login).toHaveBeenCalledWith({
         email: "alice@example.com",
         password: "Password123!",
       });
@@ -72,31 +65,25 @@ describe("RegisterForm", () => {
     expect(mocks.refresh).toHaveBeenCalledOnce();
   });
 
-  it("shows the API error without redirecting", async () => {
+  it("shows an error and stays on the page for invalid credentials", async () => {
     const user = userEvent.setup();
-
-    mocks.register.mockRejectedValue(
+    mocks.login.mockRejectedValue(
       new HttpError({
-        status: 409,
-        code: "user_already_exists",
-        message: "A user with this email or username already exists",
+        status: 401,
+        code: "invalid_credentials",
+        message: "Invalid email or password",
         details: undefined,
       }),
     );
 
-    render(<RegisterForm />);
+    render(<LoginForm />);
 
-    await user.type(screen.getByLabelText("Username"), "alice");
     await user.type(screen.getByLabelText("Email"), "alice@example.com");
-    await user.type(screen.getByLabelText("Password"), "Password123!");
-    await user.click(
-      screen.getByRole("button", {
-        name: "Create account",
-      }),
-    );
+    await user.type(screen.getByLabelText("Password"), "WrongPassword123!");
+    await user.click(screen.getByRole("button", { name: "Sign in" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
-      "A user with this email or username already exists",
+      "Invalid email or password.",
     );
     expect(mocks.replace).not.toHaveBeenCalled();
     expect(mocks.refresh).not.toHaveBeenCalled();

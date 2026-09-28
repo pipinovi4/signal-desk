@@ -8,6 +8,7 @@ from app.services.session.tokens import (
     RefreshTokenManager,
     Tokens,
 )
+from fastapi import status
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -67,7 +68,7 @@ async def test_refresh_rotates_token_and_sets_valid_auth_cookies(
     response = await client.post("/v1/session/refresh")
 
     # Assert
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_204_NO_CONTENT
 
     new_refresh_token = response.cookies.get("refresh_token")
     access_token = response.cookies.get("access_token")

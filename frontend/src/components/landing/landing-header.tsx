@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 
 import { BrandLogo } from "@/components/brand-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useAuth } from "@/features/auth/context/auth-context";
 
 const navigation = [
   { href: "#product", label: "Product" },
@@ -11,6 +14,8 @@ const navigation = [
 ] as const;
 
 export function LandingHeader() {
+  const { status } = useAuth();
+
   return (
     <header className="border-border bg-background sticky top-0 z-50 border-b">
       <nav
@@ -38,18 +43,31 @@ export function LandingHeader() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <Link
-            href="/login"
-            className="text-muted-foreground hover:text-foreground focus-visible:outline-primary hidden rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 sm:inline-flex"
-          >
-            Sign in
-          </Link>
-          <Link
-            href="/register"
-            className="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:outline-primary inline-flex h-10 items-center rounded-lg px-4 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
-          >
-            Get started
-          </Link>
+          {status === "anonymous" ? (
+            <>
+              <Link
+                href="/login"
+                className="text-muted-foreground hover:text-foreground focus-visible:outline-primary hidden rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 sm:inline-flex"
+              >
+                Sign in
+              </Link>
+
+              <Link
+                href="/register"
+                className="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:outline-primary inline-flex h-10 items-center rounded-lg px-4 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                Get started
+              </Link>
+            </>
+          ) : status === "authenticated" ? (
+            <Link
+              href="/dashboard"
+              className="bg-primary text-primary-foreground inline-flex h-10 items-center rounded-lg px-4 text-sm font-semibold"
+            >
+              Dashboard
+            </Link>
+          ) : null}
+
           <ThemeToggle />
         </div>
       </nav>

@@ -1,6 +1,7 @@
 from app.core.settings import settings
 from app.models import AuthSession
 from app.services.session.tokens import Tokens
+from fastapi import status
 from httpx import AsyncClient
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -54,7 +55,7 @@ async def test_logout_revokes_session_and_clears_auth_cookies(
     )
 
     # Assert
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_204_NO_CONTENT
 
     db_session.expunge_all()
     persisted_session = await db_session.get(
@@ -82,7 +83,7 @@ async def test_logout_without_refresh_cookie_is_idempotent(
     )
 
     # Assert
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_204_NO_CONTENT
     assert_auth_cookies_cleared(response.headers.get_list("set-cookie"))
 
     auth_session_count = await db_session.scalar(select(func.count()).select_from(AuthSession))
@@ -102,7 +103,7 @@ async def test_logout_with_invalid_refresh_cookie_is_idempotent(
     )
 
     # Assert
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_204_NO_CONTENT
     assert_auth_cookies_cleared(response.headers.get_list("set-cookie"))
 
     auth_session_count = await db_session.scalar(select(func.count()).select_from(AuthSession))

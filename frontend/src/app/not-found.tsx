@@ -37,7 +37,7 @@ export default function NotFound() {
         </div>
 
         <Link
-          href="/"
+          href="/dashboard"
           className="bg-primary hover:bg-primary-hover text-primary-foreground mt-8 inline-flex h-11 items-center justify-center rounded-xl px-6 text-sm font-semibold transition-colors"
         >
           Return home
