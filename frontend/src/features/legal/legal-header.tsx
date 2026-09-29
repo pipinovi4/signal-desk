@@ -14,7 +14,7 @@ export function LegalHeader({ title }: LegalHeaderProps) {
       <div className="flex min-h-18 items-center justify-between gap-4 px-5 sm:px-8 lg:px-10">
         <div className="flex min-w-0 items-center gap-3 sm:gap-4">
           <Link
-            href="/"
+            href="/dashboard"
             className="focus-visible:outline-primary flex shrink-0 rounded-sm transition-opacity focus-visible:outline-2 focus-visible:outline-offset-4"
             aria-label="SignalDesk home"
           >
